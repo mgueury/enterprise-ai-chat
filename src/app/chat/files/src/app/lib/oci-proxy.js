@@ -65,7 +65,7 @@ export async function ociRequest(method, path, options = {}) {
     ? `https://${hostConfig.host()}${basePath}`
     : hostConfig.base();
   const endpoint = `${baseUrl}${path}`;
-
+  log.info(`mgueury - endpoint=${endpoint}`);
   const headers = {
     'accept': 'application/json',
     'host': hostConfig.host(),
@@ -82,6 +82,7 @@ export async function ociRequest(method, path, options = {}) {
   // JSON body (POST/PUT)
   if (body !== null) {
     const bodyString = JSON.stringify(body);
+    log.info(`mgueury - bodyString=${bodyString}`);
     headers['content-type'] = 'application/json';
     headers['x-content-sha256'] = crypto.createHash('sha256').update(bodyString).digest('base64');
     headers['content-length'] = Buffer.byteLength(bodyString).toString();

@@ -2,6 +2,7 @@ variable project_ocid {
   default=null
   description= "OpenAI Project OCID"   
 }
+
 resource "null_resource" "custom_dependency" {
     provisioner "local-exec" {
         command = <<-EOT
