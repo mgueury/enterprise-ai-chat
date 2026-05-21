@@ -8,12 +8,8 @@ export OCI_REGION=$TF_VAR_region
 export OCI_COMPARTMENT_ID=$TF_VAR_compartment_ocid
 export OCI_GENAI_PROJECT_ID=$TF_VAR_genai_project_ocid
 
-# Local dev (API-key auth via ~/.oci/config)
-export OCI_CONFIG_FILE=~/.oci/config
-export OCI_CONFIG_PROFILE=DEFAULT
-
-# Container deployments (Resource Principal instead of config file)
-# export USE_RESOURCE_PRINCIPAL=true
+# Container deployments (RESOURCE_PRINCIPAL or INSTANCE_PRINCIPAL instead of config file)
+export USE_PRINCIPAL="INSTANCE_PRINCIPAL"
 
 # export IDCS_DOMAIN_URL=https://idcs-xxxx.identity.oraclecloud.com
 # export IDCS_CLIENT_ID=...
@@ -25,4 +21,5 @@ export OCI_CONFIG_PROFILE=DEFAULT
 # export LANGFUSE_BASE_URL=https://cloud.langfuse.com
 # export LOG_LEVEL=info
 
+cd files
 npm run dev > chat.log 2>&1 

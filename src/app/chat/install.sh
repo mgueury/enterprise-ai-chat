@@ -7,5 +7,5 @@ cd $SCRIPT_DIR
 sudo dnf module enable -y nodejs:20
 sudo dnf module install -y nodejs
 
+cd files
 npm install
-
