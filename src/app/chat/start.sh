@@ -6,7 +6,7 @@ cd $SCRIPT_DIR
 # OCI Enterprise AI: set to your tenancy's region
 export OCI_REGION=$TF_VAR_region
 export OCI_COMPARTMENT_ID=$TF_VAR_compartment_ocid
-export OCI_GENAI_PROJECT_ID=$TF_VAR_genai_project_ocid
+export OCI_GENAI_PROJECT_ID=$TF_VAR_project_ocid
 
 export NEXT_PUBLIC_GENAI_API_URL="http://${BASTION_IP}:8080/api"
 

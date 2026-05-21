@@ -1,4 +1,4 @@
-variable genai_project_ocid {
+variable project_ocid {
   default=null
   description= "OpenAI Project OCID"   
 }
@@ -16,7 +16,7 @@ resource "null_resource" "custom_dependency" {
             fi 
         }
         append "# Custom"
-        append_export "TF_VAR_genai_project_ocid" "${var.genai_project_ocid}"
+        append_export "TF_VAR_project_ocid" "${var.project_ocid}"
         EOT
     }
     depends_on = [ null_resource.tf_env ]
