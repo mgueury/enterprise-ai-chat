@@ -124,7 +124,6 @@ resource "null_resource" "build_deploy" {
   }
   depends_on = [
     oci_core_instance.starter_compute,
-    oci_database_autonomous_database.starter_atp,
     tls_private_key.ssh_key,  
     null_resource.custom_dependency,  
     null_resource.tf_env  
