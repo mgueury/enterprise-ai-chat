@@ -1,5 +1,4 @@
 src/terraform/.terraform
-src/terraform/provider.tf
 src/terraform/env.tf
 src/function/command.md
 src/helidon
