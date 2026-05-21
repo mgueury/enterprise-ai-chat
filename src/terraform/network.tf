@@ -142,6 +142,16 @@ resource "oci_core_security_list" "starter_security_list" {
     }
   }
 
+  ingress_security_rules {
+    protocol  = "6" // tcp
+    source    = var.public_ip_filter
+    stateless = false
+
+    tcp_options {
+      min = 3000
+      max = 3000
+    }
+  }
 
   ingress_security_rules {
     protocol  = "6" // tcp
