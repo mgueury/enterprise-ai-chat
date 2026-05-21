@@ -22,4 +22,5 @@ export USE_PRINCIPAL="INSTANCE_PRINCIPAL"
 # export LOG_LEVEL=info
 
 cd files
-npm run dev > chat.log 2>&1 
+export PORT=8080
+npm run dev > ../chat.log 2>&1 
