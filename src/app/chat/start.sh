@@ -8,6 +8,8 @@ export OCI_REGION=$TF_VAR_region
 export OCI_COMPARTMENT_ID=$TF_VAR_compartment_ocid
 export OCI_GENAI_PROJECT_ID=$TF_VAR_genai_project_ocid
 
+export NEXT_PUBLIC_GENAI_API_URL="http://localhost:8080/api"
+
 # Container deployments (RESOURCE_PRINCIPAL or INSTANCE_PRINCIPAL instead of config file)
 export USE_PRINCIPAL="INSTANCE_PRINCIPAL"
 
