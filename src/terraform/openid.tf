@@ -59,6 +59,6 @@ resource "oci_identity_domains_app" "starter_confidential_app" {
 }
 
 locals {
-    openid_client_id = try(oci_identity_domains_app.starter_confidential_app.name, "")
-    openid_client_secret = try(oci_identity_domains_app.starter_confidential_app.client_secret, "")
+    openid_client_id = try(oci_identity_domains_app.starter_confidential_app[0].name, "")
+    openid_client_secret = try(oci_identity_domains_app.starter_confidential_app[0].client_secret, "")
 }
