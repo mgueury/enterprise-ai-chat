@@ -67,6 +67,9 @@ resource "oci_apigateway_deployment" "starter_apigw_deployment" {
       backend {
         type = "HTTP_BACKEND"
         url    = "http://${local.apigw_dest_private_ip}:8080/$${request.path[pathname]}"
+        connect_timeout_in_seconds = 60
+        read_timeout_in_seconds = 120
+        send_timeout_in_seconds = 120            
       }
     } 
   }
