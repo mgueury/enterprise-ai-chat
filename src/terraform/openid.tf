@@ -1,10 +1,16 @@
-variable openid {
-    description="enable OpenID (SSO) if true"
-    default=null
+variable "openid" {
+    type        = bool
+    description = "enable OpenID (SSO) if true"
+    default     = false
 }
 
+locals {
+    idcs_endpoint = regex("^https?://[^/?#]+", trimspace(local.local_idcs_url))
+}
+
+
 resource "oci_identity_domains_app" "starter_confidential_app" {
-    count                   = var.openid=="true" ? 0 : 1
+    count                   = var.openid ? 0 : 1
     active                  = "true"
     all_url_schemes_allowed = "false"
     allow_access_control    = "false"
@@ -30,7 +36,7 @@ resource "oci_identity_domains_app" "starter_confidential_app" {
     delegated_service_names = [
     ]
     display_name = "${var.prefix}-confidential-app"
-    idcs_endpoint = "${local.local_idcs_url}"
+    idcs_endpoint = "${local.idcs_endpoint}"
     is_alias_app      = "false"
     is_enterprise_app = "false"
     is_kerberos_realm = "false"
