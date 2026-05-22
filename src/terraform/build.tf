@@ -89,7 +89,7 @@ resource "null_resource" "build_deploy" {
         fi
 
         # Build all apps
-        if [ "$TF_VAR_build_host" == "terraform" ]; then
+        if [ "$TF_VAR_build_host" != "bastion" ]; then
             for APP_NAME in `app_name_list_build`; do
                 src/app/$APP_NAME/build.sh
                 exit_on_error "Build App $APP_NAME"
