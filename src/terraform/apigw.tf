@@ -58,81 +58,17 @@ resource "oci_apigateway_deployment" "starter_apigw_deployment" {
   compartment_id = local.lz_app_cmp_ocid
   display_name   = "${var.prefix}-apigw-deployment"
   gateway_id     = local.apigw_ocid
-  path_prefix    = "/${var.prefix}"
+  path_prefix    = "/"
   specification {
     # Route the COMPUTE_PRIVATE_IP 
     routes {
-      path    = "/app/{pathname*}"
+      path    = "/{pathname*}"
       methods = [ "ANY" ]
       backend {
         type = "HTTP_BACKEND"
         url    = "http://${local.apigw_dest_private_ip}:8080/$${request.path[pathname]}"
       }
     } 
-    routes {
-      path    = "/{pathname*}"
-      methods = [ "ANY" ]
-      backend {
-        type = "HTTP_BACKEND"
-        url    = "http://${local.apigw_dest_private_ip}/$${request.path[pathname]}"
-      }
-      # Forward the JWT access_token using Bearer
-      # To decode, and get the username  
-      # curl -X GET -H "Authorization: Bearer access_token" https://idcs-xxxxx.identity.oraclecloud.com/oauth2/v1/userinfo
-      request_policies {
-        header_transformations {
-          set_headers {
-            items {
-              if_exists = "OVERWRITE"
-              name      = "Authorization"
-              values = [
-                "Bearer $${request.auth[access_token]}",
-              ]
-            }
-          }
-        }
-      }         
-    }      
   }
   freeform_tags = local.api_tags
 }      
-
-/*
-# resource oci_logging_log starter_apigw_deployment_execution {
-  count = var.log_group_ocid == null ? 0 : 1
-  log_group_id = var.log_group_ocid
-  configuration {
-    compartment_id = local.lz_app_cmp_ocid
-    source {
-      category    = "execution"
-      resource    = oci_apigateway_deployment.starter_apigw_deployment.id
-      service     = "apigateway"
-      source_type = "OCISERVICE"
-    }
-  }
-  display_name = "${var.prefix}-apigw-deployment-execution"
-  freeform_tags = local.freeform_tags
-  is_enabled         = "true"
-  log_type           = "SERVICE"
-  retention_duration = "30"
-}
-
-# resource oci_logging_log starter_apigw_deployment_access {
-  count = var.log_group_ocid == null ? 0 : 1
-  log_group_id = var.log_group_ocid
-  configuration {
-    compartment_id = local.lz_app_cmp_ocid
-    source {
-      category    = "access"
-      resource    = oci_apigateway_deployment.starter_apigw_deployment.id
-      service     = "apigateway"
-      source_type = "OCISERVICE"
-    }
-  }
-  display_name = "${var.prefix}-apigw-deployment-access"
-  freeform_tags = local.freeform_tags
-  is_enabled         = "true"
-  log_type           = "SERVICE"
-  retention_duration = "30"
-}
-*/
