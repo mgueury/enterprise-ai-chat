@@ -36,14 +36,13 @@ resource "oci_identity_domains_app" "starter_confidential_app" {
   is_unmanaged_app         = "false"
   is_web_tier_policy       = "false"
   login_mechanism = "OIDC"
-  logout_uri = "https://${local.local_apigw_hostname}/openid/logout"
+  logout_uri = "https://${local.local_apigw_hostname}/logout"
   post_logout_redirect_uris = [
     "https://www.oracle.com",
-    "https://${local.local_apigw_hostname}/",
-    "https://${local.local_apigw_hostname}/openid/chat.html",
+    "https://${local.local_apigw_hostname}/"
   ]
   redirect_uris = [
-    "https://${local.local_apigw_hostname}/openid/chat.html"
+    "https://${local.local_apigw_hostname}/api/auth/callback/oci"
   ]
   schemas = [
     "urn:ietf:params:scim:schemas:oracle:idcs:App"
