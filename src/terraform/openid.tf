@@ -65,13 +65,6 @@ locals {
 }
 
 output test {
-  value="https://${local.local_apigw_hostname}/logout"
+  value=local.openid_client_id
 }
 
-output test2 {
-  value="https://${local.local_apigw_hostname}/api/auth/callback/oci"
-}
-
-output test3 {
-  value="${local.local_idcs_url}"
-}
