@@ -31,19 +31,20 @@ resource "null_resource" "tf_env" {
       fi 
     }
     append_export "TF_VAR_prefix" "${coalesce(var.prefix,"-")}"
-    append_export "TF_VAR_db_password" "${coalesce(var.db_password,"-")}"
-    append_export "TF_VAR_license_model" "${coalesce(var.license_model,"-")}"
+    append_export "TF_VAR_your_public_ssh_key" "${coalesce(var.your_public_ssh_key,"-")}"
     append_export "TF_VAR_compartment_ocid" "${coalesce(var.compartment_ocid,"-")}"  
     append "# Terraform Locals"
+    append_export "APIGW_HOSTNAME" "${local.local_apigw_hostname}"
     append_export "BASTION_IP" "${local.local_bastion_ip}"
     append_export "COMPUTE_IP" "${local.local_compute_ip}"
     append_export "IDCS_URL" "${local.local_idcs_url}"
     append_export "OBJECT_STORAGE_NAMESPACE" "${local.local_object_storage_namespace}"
-    append_export "OCIR_HOST" "${local.local_ocir_host}"
+    append_export "OCIR_HOST" "${local.local_ocir_host}" 
     append "# Fixed"
     append_export "TF_VAR_app_mode" "terraform"
-    append_export "TF_VAR_build_host" "terraform"
-    append_export "TF_VAR_deploy_type" "public_compute"
+    append_export "TF_VAR_build_host" "bastion"
+    append_export "TF_VAR_db_type" "none"
+    append_export "TF_VAR_deploy_type" "private_compute"
     append_export "TF_VAR_language" "node"
     append_export "TF_VAR_python_framework" "fastapi"
     append_export "TF_VAR_ui_type" "html"
@@ -54,7 +55,7 @@ resource "null_resource" "tf_env" {
     append "# Database"
     append "export DB_USER=\$TF_VAR_db_user" 
     append "export DB_PASSWORD=\$TF_VAR_db_password" 
-    # append_export "OCI_STARTER_CREATION_DATE" "2026-05-21-08-16-07-420068"
+    # append_export "OCI_STARTER_CREATION_DATE" "2026-05-22-07-05-43-238152"
     # append_export "OCI_STARTER_VERSION" "4.2"
     # append_export "OCI_STARTER_PARAMS" "prefix,java_framework,java_vm,java_version,python_framework,ui_type,db_type,license_model,app_mode,mode,infra_as_code,db_password,oke_type,security,build_host,deploy_type,language"
     chmod 755 $ENV_FILE
@@ -118,7 +119,12 @@ resource "null_resource" "build_deploy" {
         EOT
   }
   depends_on = [
+    oci_apigateway_api.starter_api,
+    oci_apigateway_deployment.starter_apigw_deployment,
+    oci_apigateway_gateway.starter_apigw,
+    oci_core_instance.starter_bastion,
     oci_core_instance.starter_compute,
+    oci_identity_policy.starter_bastion_policy,
     tls_private_key.ssh_key,  
     null_resource.custom_dependency,  
     null_resource.tf_env  

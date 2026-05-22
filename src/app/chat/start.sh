@@ -8,12 +8,17 @@ export OCI_REGION=$TF_VAR_region
 export OCI_COMPARTMENT_ID=$TF_VAR_compartment_ocid
 export OCI_GENAI_PROJECT_ID=$TF_VAR_project_ocid
 
-export NEXT_PUBLIC_GENAI_API_URL="http://${BASTION_IP}:8080/api"
+export NEXT_PUBLIC_GENAI_API_URL="https://${APIGW_HOSTNAME}:8080/api"
 
 # Container deployments (RESOURCE_PRINCIPAL or INSTANCE_PRINCIPAL instead of config file)
 export USE_PRINCIPAL="INSTANCE_PRINCIPAL"
 
-# export IDCS_DOMAIN_URL=https://idcs-xxxx.identity.oraclecloud.com
+export IDCS_DOMAIN_URL=$IDCS_URL
+export IDCS_CLIENT_ID=$TF_VAR_openid_client_id
+export IDCS_CLIENT_SECRET=$TF_VAR_openid_client_secret
+export SESSION_SECRET='abcdefgh1234567890'
+
+# export IDCS_DOMAIN_URL=$IDCS_URLhttps://idcs-xxxx.identity.oraclecloud.com
 # export IDCS_CLIENT_ID=...
 # export IDCS_CLIENT_SECRET=...
 # export SESSION_SECRET=<random-long-string>

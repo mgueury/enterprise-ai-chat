@@ -13,8 +13,8 @@ resource "oci_core_instance" "starter_compute" {
   }
 
   create_vnic_details {
-    subnet_id                 = data.oci_core_subnet.starter_web_subnet.id
-    assign_public_ip          = true
+    subnet_id                 = data.oci_core_subnet.starter_app_subnet.id
+    assign_public_ip          = false
     display_name              = "Primaryvnic"
     assign_private_dns_record = true
     hostname_label            = "${var.prefix}-compute"

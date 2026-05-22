@@ -18,6 +18,8 @@ resource "null_resource" "custom_dependency" {
         }
         append "# Custom"
         append_export "TF_VAR_project_ocid" "${var.project_ocid}"
+        append_export "TF_VAR_openid_client_id" "${local.openid_client_id}"
+        append_export "TF_VAR_openid_client_secret" "${local.openid_client_secret}"
         EOT
     }
     depends_on = [ null_resource.tf_env ]
