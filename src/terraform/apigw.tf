@@ -71,6 +71,20 @@ resource "oci_apigateway_deployment" "starter_apigw_deployment" {
         read_timeout_in_seconds = 120
         send_timeout_in_seconds = 120            
       }
+      request_policies {
+        header_transformations {
+          set_headers {
+            items {
+              name = "Host"
+              values = ["$${request.headers[Host]}"]
+            }
+            items {
+              name = "X-Forwarded-Proto"
+              values = ["https"]
+            }
+          }
+        }
+      }      
     } 
   }
   freeform_tags = local.api_tags
