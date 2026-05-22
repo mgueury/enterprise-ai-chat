@@ -4,7 +4,7 @@ variable openid {
 }
 
 resource "oci_identity_domains_app" "starter_confidential_app" {
-    count                   = var.openid=="true" ? 0 : 1      0
+    count                   = var.openid=="true" ? 0 : 1
     active                  = "true"
     all_url_schemes_allowed = "false"
     allow_access_control    = "false"
