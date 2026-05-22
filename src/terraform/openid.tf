@@ -62,3 +62,15 @@ locals {
     openid_client_id = try(oci_identity_domains_app.starter_confidential_app[0].name, "")
     openid_client_secret = try(oci_identity_domains_app.starter_confidential_app[0].client_secret, "")
 }
+
+output test {
+  value="https://${local.local_apigw_hostname}/logout"
+}
+
+output test2 {
+  value="https://${local.local_apigw_hostname}/api/auth/callback/oci"
+}
+
+output test3 {
+  value="${local.local_idcs_url}"
+}
