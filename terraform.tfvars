@@ -15,3 +15,11 @@ public_ip_filter="__TO_FILL__"
 #   Goal: clone the git repository on your laptop for Vibe Coding
 your_public_ssh_key="__TO_FILL__"
 
+# Uncomment to enable login in LangGraph application using OpenID via API Gateway and Confidential Application 
+# Needs OCI Identity Domain rights.
+# openid="true"
+
+# LangFuse
+# langfuse_public_key="pk-lf-change-it"
+# langfuse_secret_key="sk-lf-change-it"
+# langfuse_base_url="http://langfuse-compute.##PREFIX##web.##PREFIX##vcn.oraclevcn.com:3000"
