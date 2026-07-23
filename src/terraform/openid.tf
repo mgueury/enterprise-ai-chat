@@ -1,7 +1,7 @@
 locals {
     openid_client_id = try( oci_identity_domains_app.starter_confidential_app[0].name, "" )
     openid_client_secret = try( oci_identity_domains_app.starter_confidential_app[0].client_secret, "" )
-    apigw_hostname = oci_apigateway_gateway.starter_apigw.hostname
+    base_url = "https://${local.compute_public_ip}"
 }
 
 variable "openid" {
@@ -49,11 +49,11 @@ resource "oci_identity_domains_app" "starter_confidential_app" {
     is_web_tier_policy       = "false"
     login_mechanism = "OIDC"
     post_logout_redirect_uris = [
-        "https://${local.compute_public_ip}/",
+        "${local.base_url}/",
     ]
     redirect_uris = [
-        "https://${local.compute_public_ip}/",
-        "https://${local.compute_public_ip}/api/auth/callback/oci"
+        "${local.base_url}/",
+        "${local.base_url}/api/auth/callback/oci"
     ]
     schemas = [
         "urn:ietf:params:scim:schemas:oracle:idcs:App"
