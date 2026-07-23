@@ -205,6 +205,7 @@ const ConversationStorage = {
         return existing;
       }
 
+      console.log('Add title:', title);
       const newConversation = {
         id,
         urlId: generateUrlId(),
@@ -231,8 +232,10 @@ const ConversationStorage = {
    */
   async update(id, updates) {
     return withWriteLock(async () => {
+      console.log('[ConversationStorage] update: id - ', id );
       const conversations = await STORAGE_ADAPTER.getAll();
-      const index = conversations.findIndex(c => c.id === id);
+      const index = conversations.findIndex(c => c.id === id );
+      console.log('[ConversationStorage] update: index - ', index);
 
       if (index === -1) {
         return null;

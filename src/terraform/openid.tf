@@ -1,11 +1,16 @@
+locals {
+    openid_client_id = try( oci_identity_domains_app.starter_confidential_app[0].name, "" )
+    openid_client_secret = try( oci_identity_domains_app.starter_confidential_app[0].client_secret, "" )
+    apigw_hostname = oci_apigateway_gateway.starter_apigw.hostname
+}
+
 variable "openid" {
-    type        = bool
-    description = "enable OpenID (SSO) if true"
-    default     = true
+    default=""
+    description="Enable OpenID / OAuth2"
 }
 
 resource "oci_identity_domains_app" "starter_confidential_app" {
-    count                   = var.openid ? 1 : 0
+    count = var.openid == "true" ? 1 : 0
     active                  = "true"
     all_url_schemes_allowed = "false"
     allow_access_control    = "false"
@@ -31,7 +36,7 @@ resource "oci_identity_domains_app" "starter_confidential_app" {
     delegated_service_names = [
     ]
     display_name = "${var.prefix}-confidential-app"
-    idcs_endpoint = regex("^https?://[^/?#]+", trimspace(local.local_idcs_url)) # Remove trailing /
+    idcs_endpoint = trimsuffix(local.local_idcs_url, "/")
     is_alias_app      = "false"
     is_enterprise_app = "false"
     is_kerberos_realm = "false"
@@ -43,13 +48,11 @@ resource "oci_identity_domains_app" "starter_confidential_app" {
     is_unmanaged_app         = "false"
     is_web_tier_policy       = "false"
     login_mechanism = "OIDC"
-    logout_uri = "https://${local.compute_public_ip}/logout"
     post_logout_redirect_uris = [
-        "https://www.oracle.com",
-        "https://${local.compute_public_ip}/"
+        "https://${local.compute_public_ip}/",
     ]
     redirect_uris = [
-        "https://localhost/api/auth/callback/oci",
+        "https://${local.compute_public_ip}/",
         "https://${local.compute_public_ip}/api/auth/callback/oci"
     ]
     schemas = [
@@ -58,13 +61,3 @@ resource "oci_identity_domains_app" "starter_confidential_app" {
     show_in_my_apps = "false"
     trust_scope     = "Account"
 }
-
-locals {
-    openid_client_id = try(oci_identity_domains_app.starter_confidential_app[0].name, "")
-    openid_client_secret = try(oci_identity_domains_app.starter_confidential_app[0].client_secret, "")
-}
-
-output test {
-  value=local.openid_client_id
-}
-

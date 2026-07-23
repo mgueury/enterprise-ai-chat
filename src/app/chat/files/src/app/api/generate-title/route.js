@@ -7,19 +7,20 @@ export async function POST(request) {
   const log = createLogger('generate-title-api', { requestId });
 
   try {
-    const { userMessage } = await request.json();
+    const { userMessage, assistantResponse } = await request.json();
 
     if (!userMessage) {
       return NextResponse.json({ error: 'userMessage is required' }, { status: 400 });
     }
 
-    const prompt = `Convert to a clean 2-4 word title (fix typos):
-"tell me a jok" → "Joke Request"
-"whats the wether" → "Weather Inquiry"
-"${userMessage.substring(0, 150)}" → "`;
+    const prompt = `Create a clear 2-4 word conversation title. Use the user's request and the assistant's answer to capture the topic; fix typos. Return only the title, without quotation marks or explanation.
+
+User: ${userMessage.substring(0, 300)}
+Assistant: ${(assistantResponse || '').substring(0, 500)}
+Title:`;
 
     const requestBody = {
-      model: 'openai.gpt-4o-mini',
+      model: 'google.gemini-2.5-flash-lite',
       input: [{ role: 'user', content: prompt }],
       stream: false
     };
