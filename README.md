@@ -24,9 +24,10 @@ Help (Tutorial + How to customize): https://www.ocistarter.com/help
 ### Next Steps:
 - Edit the file terraform.tfvars. Some variables need to be filled:
 ```
-db_password="__TO_FILL__"
+public_ip_filter="__TO_FILL__"
+your_public_ssh_key="__TO_FILL__"
 ```
 
 - Run:
-  cd starter
+  cd chat
   ./starter.sh

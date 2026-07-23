@@ -12,6 +12,7 @@ echo "ARCH=$ARCH"
 # Shared Install Function
 . ./shared_compute.sh
 title "Compute Install"
+dnf_makecache
 
 if ! grep -q "export LC_CTYPE" $HOME/.bashrc; then
     # Set VI and NANO in utf8
@@ -40,13 +41,25 @@ EOT
 
     # Resize the boot volume (if >47GB)
     sudo /usr/libexec/oci-growfs -y
+
+    # Workaround: DNF issue Sometimes the dnf variables are wrong...
+    ocidomain=`cat /etc/dnf/vars/ocidomain`
+    if [ "$ocidomain" == "oracle.com" ]; then
+        echo "WARNING: ocidomain=oracle.com. Trying to fix it."
+        region=`cat /etc/dnf/vars/region`
+        sudo bash -c 'echo "oci.oraclecloud.com" > /etc/dnf/vars/ocidomain'
+        sudo bash -c "echo \".$region\" > /etc/dnf/vars/ociregion"
+    fi
+
+    # Workaround : Force the ol8_oci_included (sometimes it is deactivated)
+    sudo dnf config-manager --enable ol8_oci_included    
 fi
 
 if ! grep -q "# Build Bastion" $HOME/.bashrc; then
     if [ "$TF_VAR_build_host" == "bastion" ]; then 
         echo "# Build Bastion" >> $HOME/.bashrc# Build_host = bastion
         # Kubernetes 
-        if [ "$TF_VAR_oke_ocid" != "" ]; then 
+        if [ "$TF_VAR_deploy_type" == "kubernetes" ]; then 
             install_docker_tools
             echo "export KUBECONFIG=$HOME/compute/kubeconfig_starter" >> $HOME/.bashrc
         fi 
@@ -69,6 +82,9 @@ if ! grep -q "# Build Bastion" $HOME/.bashrc; then
         cp $HOME/compute/git/post-receive ~/app.git/hooks
         chmod +x ~/app.git/hooks/post-receive
         chmod +x ~/app.git/hooks/post-receive
+
+        # Cline CLI
+        install_cline_cli        
     fi
 fi
 
@@ -104,6 +120,7 @@ Type=simple
 ExecStart=/home/opc/app/$APP_DIR/start.sh
 TimeoutStartSec=0
 User=opc
+Environment=XDG_RUNTIME_DIR=/run/user/1000
 
 [Install]
 WantedBy=default.target

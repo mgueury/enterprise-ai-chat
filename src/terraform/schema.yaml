@@ -1,4 +1,4 @@
-title: "OCI Starter: From Resource Manager starter "
+title: "OCI Starter: From Resource Manager chat "
 stackDescription: "Resource Manager stack created by OCI Starter " 
 description: "Stack will deploy the component used in the OCI Starter project" 
 schemaVersion: 1.1.0
@@ -14,9 +14,9 @@ variableGroups:
   visible: true  
   variables:
   - prefix
-  - db_password
-  - license_model
   - compartment_ocid
+  - public_ip_filter
+  - your_public_ssh_key
   - show_optional
 
 - title: Fixed
@@ -25,7 +25,6 @@ variableGroups:
   - app_mode
   - build_host
   - db_type
-  - db_user
   - deploy_type
   - language
   - python_framework
@@ -34,9 +33,14 @@ variableGroups:
 - title: Optional
   visible: ${show_optional}  
   variables:
+  - app_subnet_ocid
   - auth_token
   - availability_domain_number
   - certificate_ocid
+  - config_file_profile
+  - db_password
+  - db_subnet_ocid
+  - db_user
   - group_name
   - home_region
   - idcs_domain_name
@@ -45,6 +49,7 @@ variableGroups:
   - instance_ocpus
   - instance_shape
   - instance_shape_config_memory_in_gbs
+  - license_model
   - log_group_ocid
   - lz_app_cmp_ocid
   - lz_db_cmp_ocid
@@ -53,12 +58,12 @@ variableGroups:
   - lz_serv_cmp_ocid
   - lz_web_cmp_ocid
   - no_policy
-  - public_ip_filter
   - region
   - ssh_private_key
   - ssh_public_key
   - tenancy_ocid
-  - your_public_ssh_key
+  - vcn_ocid
+  - web_subnet_ocid
 
 #################
 # Output Groups
@@ -70,6 +75,10 @@ variableGroups:
 
 variables:
 # Env Params
+  app_subnet_ocid:    
+    type: string
+    title: app_subnet_ocid
+    required: false
   auth_token:    
     type: string
     title: auth_token
@@ -89,12 +98,20 @@ variables:
     title: Compartment
     description: "Compartment OCID"
     required: true
+  config_file_profile:    
+    type: string
+    title: config_file_profile
+    required: false
   db_password:
     type: password
     confirmation: true
     title: Database Password
     description: "Min length 12 characters, 2 lowercase, 2 uppercase, 2 numbers, 2 special characters. Ex: LiveLab__12345"
-    required: true
+    required: false
+  db_subnet_ocid:    
+    type: string
+    title: db_subnet_ocid
+    required: false
   db_user:    
     type: string
     title: Database User
@@ -118,10 +135,10 @@ variables:
   infra_as_code:
     type: enum
     enum:
-      - terraform_object_storage
       - resource_manager
-      - from_resource_manager
+      - terraform_object_storage
       - terraform_local
+      - from_resource_manager
     title: infra_as_code
     required: false
   instance_ocpus:    
@@ -139,11 +156,11 @@ variables:
   license_model:
     type: enum
     enum:
-      - LICENSE_INCLUDED
       - BRING_YOUR_OWN_LICENSE
+      - LICENSE_INCLUDED
     title: Licence Model
     description: "BRING_YOUR_OWN_LICENSE or LICENSE_INCLUDED"
-    required: true
+    required: false
   log_group_ocid:    
     type: string
     title: log_group_ocid
@@ -184,7 +201,8 @@ variables:
   public_ip_filter:    
     type: string
     title: public_ip_filter
-    required: false
+    description: "IP Range that can access port like 80/443 on the internet. Typically:"
+    required: true
   region:
     type: oci:identity:region:name
     title: Region
@@ -201,11 +219,19 @@ variables:
     type: string
     title: Tenancy
     required: false
+  vcn_ocid:    
+    type: string
+    title: vcn_ocid
+    required: false
+  web_subnet_ocid:    
+    type: string
+    title: web_subnet_ocid
+    required: false
   your_public_ssh_key:    
     type: string
     title: your_public_ssh_key
-    description: "Your ssh public key (associated with your private key stored in your laptop) that will be added in .ssh/authorized host in the bastion. Goal: clone the git repository on your laptop for Vibe Coding"
-    required: false
+    description: "Your ssh public key (associated with your private key stored in your laptop) that will be added in .ssh/authorized host in the bastion."
+    required: true
   show_optional:
     type: boolean
     title: Advanced

@@ -69,6 +69,28 @@ exit_on_error() {
 }
 export -f exit_on_error
 
+# -- dnf_makecache ----------------------------------------------------------
+dnf_makecache() {
+    # Wait that the machine is ready
+    title "dnf makecache"
+    success=0
+    for i in {1..10}; do
+        if sudo dnf makecache; then
+            success=1
+            echo "DNF MakeCache: Success"
+            break
+        fi
+        echo "Waiting 10 secs for yum repositories... ($i/10)"
+        sleep 10
+    done
+
+    if [ "$success" -eq 0 ]; then
+        echo "ERROR: Yum repositories are still not reachable after 100 seconds."
+        exit 1
+    fi
+}
+export -f dnf_makecache
+
 # -- replace_db_user_password_in_file ----------------------------------------
 replace_db_user_password_in_file() {
     # Replace DB_USER DB_PASSWORD
@@ -150,11 +172,21 @@ install_java() {
     if [ "$TF_VAR_build_host" == "bastion" ]; then 
         # sudo dnf install -y maven
         if [ ! -d $HOME/maven ]; then
-            MVN_VERSION=3.9.15
-            wget https://dlcdn.apache.org/maven/maven-3/$MVN_VERSION/binaries/apache-maven-$MVN_VERSION-bin.tar.gz
-            tar xfz apache-maven-$MVN_VERSION-bin.tar.gz
-            mv apache-maven-$MVN_VERSION $HOME/maven
-            rm apache-maven-$MVN_VERSION-bin.tar.gz
+            BASE_URL="https://dlcdn.apache.org/maven/maven-3"
+            LATEST_VERSION=$(
+                wget -qO- "$BASE_URL/" |
+                grep -oE 'href="[0-9]+\.[0-9]+\.[0-9]+/' |
+                sed 's|href="||;s|/||' |
+                sort -V |
+                tail -1
+            )
+            FILE="apache-maven-${LATEST_VERSION}-bin.tar.gz"
+            URL="${BASE_URL}/${LATEST_VERSION}/binaries/${FILE}"
+            echo "Downloading Maven ${LATEST_VERSION}..."
+            wget -nv "$URL"
+            tar xfz $FILE
+            mv apache-maven-${LATEST_VERSION} $HOME/maven
+            rm $FILE
             export PATH=$HOME/maven/bin:$PATH
             echo "export PATH=$HOME/maven/bin:$PATH" >> $HOME/.bashrc 
         fi
@@ -298,13 +330,14 @@ install_instant_client() {
         sudo dnf install -y oracle-release-el8 
         sudo dnf install -y oracle-instantclient19.19-basic oracle-instantclient19.19-sqlplus oracle-instantclient19.19-tools
     else
-        export INSTANT_VERSION=23.26.0.0.0-1
+        export INSTANT_VERSION=23.26.2.0.0-2.el10.x86_64
         cd /tmp
-        if [ ! -f /tmp/oracle-instantclient-basic-${INSTANT_VERSION}.el8.x86_64.rpm ]; then
-            wget -nv https://download.oracle.com/otn_software/linux/instantclient/2326000/oracle-instantclient-basic-${INSTANT_VERSION}.el8.x86_64.rpm
-            wget -nv https://download.oracle.com/otn_software/linux/instantclient/2326000/oracle-instantclient-sqlplus-${INSTANT_VERSION}.el8.x86_64.rpm
-            wget -nv https://download.oracle.com/otn_software/linux/instantclient/2326000/oracle-instantclient-tools-${INSTANT_VERSION}.el8.x86_64.rpm
-            sudo dnf install -y oracle-instantclient-basic-${INSTANT_VERSION}.el8.x86_64.rpm oracle-instantclient-sqlplus-${INSTANT_VERSION}.el8.x86_64.rpm oracle-instantclient-tools-${INSTANT_VERSION}.el8.x86_64.rpm
+        if [ ! -f /tmp/oracle-instantclient-basic-${INSTANT_VERSION}.rpm ]; then
+            wget -nv https://download.oracle.com/otn_software/linux/instantclient/2326200v2/oracle-instantclient-basic-${INSTANT_VERSION}.rpm
+            wget -nv https://download.oracle.com/otn_software/linux/instantclient/2326200v2/oracle-instantclient-sqlplus-${INSTANT_VERSION}.rpm
+            wget -nv https://download.oracle.com/otn_software/linux/instantclient/2326200v2/oracle-instantclient-tools-${INSTANT_VERSION}.rpm
+            wget -nv https://download.oracle.com/otn_software/linux/instantclient/2326200v2/oracle-instantclient-devel-${INSTANT_VERSION}.rpm
+            sudo dnf install -y oracle-instantclient-basic-${INSTANT_VERSION}.rpm oracle-instantclient-sqlplus-${INSTANT_VERSION}.rpm oracle-instantclient-tools-${INSTANT_VERSION}.rpm oracle-instantclient-devel-${INSTANT_VERSION}.rpm
         fi 
         cd -
     fi
@@ -357,7 +390,6 @@ server {
     location / {
     }
 
-    include conf.d/nginx_app.locations;
     error_page 404 /404.html;
         location = /40x.html {
     }
@@ -390,16 +422,10 @@ install_ngnix() {
     sudo dnf install nginx -y > /tmp/dnf_nginx.log
 
     # Default: location /app/ { proxy_pass http://localhost:8080 }
-    if [ -f nginx_app.locations ]; then
-        cp nginx_app.locations $TARGET_DIR/nginx_app.locations
-        file_replace_variables $TARGET_DIR/nginx_app.locations
-        sudo cp $TARGET_DIR/nginx_app.locations /etc/nginx/conf.d/.
-        if grep -q nginx_app /etc/nginx/nginx.conf; then
-            echo "Include nginx_app.locations is already there"
-        else
-            echo "Adding nginx_app.locations"
-            sudo awk -i inplace '/404.html/ && !x {print "        include conf.d/nginx_app.locations;"; x=1} 1' /etc/nginx/nginx.conf
-        fi
+    if [ -f nginx_app.conf ]; then
+        cp nginx_app.conf /tmp/nginx_app.conf
+        file_replace_variables /tmp/nginx_app.conf
+        sudo cp /tmp/nginx_app.conf /etc/nginx/default.d/.
     fi
 
     # TLS
@@ -434,15 +460,96 @@ install_ngnix() {
 }
 export -f install_ngnix 
 
+# -- install_nodejs -----------------------------------------------------
+
+install_nodejs() {
+    # sudo dnf module enable -y nodejs:20
+    # sudo dnf module install -y nodejs
+    sudo dnf install -y nodejs 
+}
+export -f install_nodejs     
+
+# -- install_cline_cli -----------------------------------------------------
+# https://docs.cline.bot/cline-cli/installation
+
+install_cline_cli() {
+    install_nodejs
+    sudo npm install -g cline
+    cline version
+    if [ "$TF_VAR_genai_api_key" == "" ] || [ "$TF_VAR_genai_model" == "" ] || [ "$TF_VAR_region" == "" ]; then
+        echo "<install_cline_cli> SKIP: Missing variables TF_VAR_genai_api_key=$TF_VAR_genai_api_key / TF_VAR_genai_model=$TF_VAR_genai_model / TF_VAR_region=$TF_VAR_region"
+    else 
+        # cline auth -p openai -k $TF_VAR_genai_api_key -b https://inference.generativeai.${TF_VAR_region}.oci.oraclecloud.com -m $TF_VAR_genai_model
+        cline auth -p openai -k $TF_VAR_genai_api_key -b https://inference.generativeai.${TF_VAR_region}.oci.oraclecloud.com -m openai.gpt-oss-120b
+    fi 
+    # xai.grok-4-1-fast-non-reasoning
+}
+export -f install_cline_cli 
+
+# -- install_opencode -----------------------------------------------------
+# https://opencode.ai/docs/
+
+install_opencode() {
+    curl -fsSL https://opencode.ai/install | bash
+    # xai.grok-4-1-fast-non-reasoning
+    cat << EOF > opencode.json
+{
+  "\$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "myprovider": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OCI",
+      "options": {
+        "baseURL": "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com",
+        "apiKey": "{env:TF_VAR_genai_api_key}"
+      },
+      "models": {
+        "grok": {
+          "name": "xai.grok-4.3"
+        }
+      }
+    }
+  }
+}
+EOF
+  
+    mkdir -p ~/.local/share/opencode
+    cat > ~/.local/share/opencode/auth.json << EOF
+{
+  "oci": {
+    "apiKey": "$TF_VAR_genai_api_key"
+  }
+}
+EOF
+
+    chmod 600 ~/.local/share/opencode/auth.json
+}
+export -f install_opencode 
+
+# -- Install Docker-CE ------------------------------------------------------
+
+install_docker_ce() {
+    # Docker-CE
+    sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+    sudo dnf install -y docker-ce
+    sudo usermod -aG docker opc
+    sudo systemctl enable docker
+    sudo systemctl start docker
+}
+export -f install_docker_ce
+
 # -- Install Docker tools ---------------------------------------------------
 
 install_docker_tools() {
-    # docker 
-    sudo yum install -y docker
-    sudo touch /etc/containers/nodocker
-
+    # Docker 
+    # sudo dnf install -y docker
+    # sudo touch /etc/containers/nodocker
+    
+    # Install Docker CE and not podman since podman compose is very unstable
+    install_docker_ce
+    
     # oci cli
-    sudo dnf install -y git python36-oci-cli
+    sudo dnf install -y git python-oci-cli
     oci setup repair-file-permissions --file $HOME/.oci/config
     oci setup repair-file-permissions --file $HOME/.oci/oci_api_key.pem    
     echo "export OCI_CLI_AUTH=instance_principal" >> ~/.bashrc  
@@ -458,6 +565,7 @@ install_docker_tools() {
     curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${ARCH_PREFIX}/kubectl
     chmod +x kubectl
     echo "source <(kubectl completion bash)" >> ~/.bashrc
+    cd -
 }
 export -f install_docker_tools
 
@@ -484,6 +592,26 @@ copy_replace_apply_target_oke() {
 }
 export -f copy_replace_apply_target_oke 
 
+# -- docker_token -----------------------------------------------------------
+
+docker_token() {
+    # Create a temporary docker auth_token (valid for 1 hour)...
+    if [ "$DOCKER_TOKEN" == "" ]; then
+        for attempt in {1..10}; do
+            export DOCKER_TOKEN=`oci raw-request --region $TF_VAR_region --http-method GET --target-uri "https://${OCIR_HOST}/20180419/docker/token" | jq -r .data.token`
+            if [ "$DOCKER_TOKEN" != "" ]; then
+                break
+            fi
+            echo "<docker_token> Error getting token. Waiting 5 seconds. (attempt $attempt/10)."
+            sleep 5
+        done    
+        echo "DOCKER_TOKEN=$DOCKER_TOKEN" | cut -c 1-50
+    else
+        echo "DOCKER_TOKEN already set."
+    fi
+}
+export -f docker_token
+
 # -- docker_login -----------------------------------------------------------
 
 docker_login() {
@@ -491,11 +619,26 @@ docker_login() {
     get_docker_prefix
     # Login only if needed
     if ! docker system info 2>/dev/null | grep -q "Username"; then
-        oci raw-request --region $TF_VAR_region --http-method GET --target-uri "https://${OCIR_HOST}/20180419/docker/token" | jq -r .data.token | docker login -u BEARER_TOKEN --password-stdin ${OCIR_HOST}
+        docker_token
+        echo $DOCKER_TOKEN | docker login -u BEARER_TOKEN --password-stdin ${OCIR_HOST}
     fi
     exit_on_error "Docker Login"
 }
 export -f docker_login
+
+# -- k8s_create_ocirsecret --------------------------------------------------
+
+k8s_create_ocirsecret() {
+    echo "<k8s_create_ocirsecret>"
+    kubectl delete secret ocirsecret  --ignore-not-found=true
+    if [ "$TF_VAR_auth_token" == "" ]; then
+        docker_token         
+        kubectl create secret docker-registry ocirsecret --docker-server=$OCIR_HOST --docker-username="BEARER_TOKEN" --docker-password="$DOCKER_TOKEN" --docker-email="$TF_VAR_email"
+    else
+        kubectl create secret docker-registry ocirsecret --docker-server=$OCIR_HOST --docker-username="$OBJECT_STORAGE_NAMESPACE/$TF_VAR_username" --docker-password="$TF_VAR_auth_token" --docker-email="$TF_VAR_email"
+    fi  
+}
+export -f k8s_create_ocirsecret
 
 # -- ocir_docker_push_app -------------------------------------------------------
 ocir_docker_push_app() {
@@ -546,7 +689,7 @@ export -f oke_deploy_app
 
 oke_get_gateway_ip() {
     if [ "$TF_VAR_gateway_ip" == "" ]; then
-        export TF_VAR_gateway_ip=$(kubectl get gateway oke-gateway -n default -o json | jq -r '.status.addresses[].value | select(startswith("10.") | not)')
+        export TF_VAR_gateway_ip=$(kubectl get gateway oke-gateway -n gateway -o json | jq -r '.status.addresses[].value | select(startswith("10.") | not)')
     fi
 }
 export -f oke_get_gateway_ip
@@ -636,3 +779,66 @@ build_rsync() {
     fi    
 }
 export -f build_rsync
+
+# -- livelab_oci_config ------------------------------------------------------------
+
+# Create a OCI Config for LiveLab (that does not support instance principal)
+livelab_oci_config()
+{
+   if [ "$LIVELABS" != "" ]; then
+     mkdir -p $HOME/.oci
+
+     # OCI Config file
+     cat > $HOME/.oci/config << EOF
+[DEFAULT]
+user=$TF_VAR_current_user_ocid
+fingerprint=$FINGERPRINT
+tenancy=$TF_VAR_tenancy_ocid
+region=$TF_VAR_region
+key_file=/home/opc/.oci/oci_api_key.pem
+EOF
+     echo "livelab_oci_config: .oci/config created"
+
+     # oci_api_key.pem
+     cat > $HOME/.oci/oci_api_key.pem << EOF
+$OCI_API_KEY_PEM
+OCI_API_KEY
+
+EOF
+    chmod 600 $HOME/.oci/config
+    chmod 600 $HOME/.oci/oci_api_key.pem
+  fi
+}
+export -f livelab_oci_config
+
+# -- port_owner ------------------------------------------------------------
+port_owner() {
+    if command -v lsof >/dev/null 2>&1; then
+        lsof -nP -iTCP:"$PORT" -sTCP:LISTEN 2>/dev/null || true
+    elif command -v ss >/dev/null 2>&1; then
+        ss -ltnp "sport = :$PORT" 2>/dev/null || true
+    fi
+}
+export -f port_owner
+
+# -- port_wait ------------------------------------------------------------
+port_wait() {
+    PORT=$1
+    for attempt in {1..10}; do
+        PORT_OWNER=$(port_owner)
+        if [ -z "$PORT_OWNER" ]; then
+            break
+        fi
+        echo "Port $PORT is already in use. Waiting 5 seconds before starting FastAPI (attempt $attempt/10)."
+        echo "$PORT_OWNER"
+        sleep 5
+    done
+
+    PORT_OWNER=$(port_owner)
+    if [ -n "$PORT_OWNER" ]; then
+        echo "ERROR: Port $PORT is still in use after 10 attempts." 
+        echo "$PORT_OWNER"
+        exit 1
+    fi
+}
+export -f port_wait

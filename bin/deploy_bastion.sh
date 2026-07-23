@@ -8,6 +8,16 @@ cd $PROJECT_DIR
 
 function scp_or_rsync() {
     if command -v rsync &> /dev/null; then
+
+        # Check whether rsync exists (Not installed by default on OL10)
+        if ! ssh -o StrictHostKeyChecking=no -i $TF_VAR_ssh_private_path "opc@$BASTION_IP" 'command -v rsync >/dev/null 2>&1'; then
+            echo "rsync not found. Installing..."
+
+            ssh -o StrictHostKeyChecking=no -i $TF_VAR_ssh_private_path "opc@$BASTION_IP" 'sudo dnf install -y rsync' || {
+                error_exit "Failed to install rsync"
+            }
+        fi
+
         rsync -av -e "ssh -o StrictHostKeyChecking=no -i $TF_VAR_ssh_private_path" $1 opc@$BASTION_IP:.
     else
         scp -r -o StrictHostKeyChecking=no -i $TF_VAR_ssh_private_path $1 opc@$BASTION_IP:/home/opc/.
@@ -33,17 +43,35 @@ function setup_bastion_dir() {
         cp -R src/app/db $BASTION_DIR/app/.
     fi
     cp $TARGET_DIR/tf_env.sh $BASTION_DIR/compute/.
+
+    if [ "$TF_VAR_deploy_type" == "public_compute" ]; then
+        if [ -d src/compute ]; then 
+            cp -R src/compute/* $BASTION_DIR/.
+        fi
+    fi
 }
 
 function scp_bastion() {
-    scp_or_rsync $BASTION_DIR/compute    
-    RESULT=$?
+    # If 
+    # - During TestSuite
+    # - Public_compute got his own bastion (=compute) and does not need to lock it.
+    # - Build is done on Bastion
+    # - This takes as condition that an normal build did happen on the bastion before and has copied the compute/test_bastion_lock.sh before
+    # Get Lock CleanUp
+    ssh -o StrictHostKeyChecking=no -i $TF_VAR_ssh_private_path opc@$BASTION_IP "echo"   
+    RESULT=$?       
     if [ $RESULT -eq 0 ]; then
-        echo "Success - scp $BASTION_DIR/compute"
+        echo "Success - SSH Bastion - echo"
     else
         return 1 
     fi
-    scp_or_rsync $BASTION_DIR/app
+    scp_or_rsync "$BASTION_DIR/*"
+    RESULT=$?
+    if [ $RESULT -eq 0 ]; then
+        echo "Success - scp $BASTION_DIR"
+    else
+        return 1 
+    fi
 }
 
 # Try 5 times to copy the files / wait 5 secs between each try
@@ -62,5 +90,5 @@ while [ true ]; do
     i=$(($i+1))
 done
 
-ssh -o StrictHostKeyChecking=no -i $TF_VAR_ssh_private_path opc@$BASTION_IP "bash compute/compute_install.sh 2>&1 | tee compute/compute_install.log"
+ssh -o StrictHostKeyChecking=no -i $TF_VAR_ssh_private_path opc@$BASTION_IP "set -o pipefail; bash compute/compute_install.sh 2>&1 | tee compute/compute_install.log"
 exit_on_error "Deploy Bastion - ssh"

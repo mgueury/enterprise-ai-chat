@@ -43,14 +43,14 @@ resource "oci_identity_domains_app" "starter_confidential_app" {
     is_unmanaged_app         = "false"
     is_web_tier_policy       = "false"
     login_mechanism = "OIDC"
-    logout_uri = "https://${local.local_apigw_hostname}/logout"
+    logout_uri = "https://${local.compute_public_ip}/logout"
     post_logout_redirect_uris = [
         "https://www.oracle.com",
-        "https://${local.local_apigw_hostname}/"
+        "https://${local.compute_public_ip}/"
     ]
     redirect_uris = [
         "https://localhost/api/auth/callback/oci",
-        "https://${local.local_apigw_hostname}/api/auth/callback/oci"
+        "https://${local.compute_public_ip}/api/auth/callback/oci"
     ]
     schemas = [
         "urn:ietf:params:scim:schemas:oracle:idcs:App"
