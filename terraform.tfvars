@@ -15,6 +15,9 @@ public_ip_filter="__TO_FILL__"
 #   Goal: clone the git repository on your laptop for Vibe Coding
 your_public_ssh_key="__TO_FILL__"
 
+# Use in OpenAI responses API (+tools)
+project_ocid="__TO_FILL__"
+
 # DAC
 # genai_endpoint_ocid="ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q"
 
