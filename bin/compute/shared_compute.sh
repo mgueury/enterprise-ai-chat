@@ -488,9 +488,23 @@ export -f install_cline_cli
 # https://opencode.ai/docs/
 
 install_opencode() {
+    echo "<install_opencode>"
     curl -fsSL https://opencode.ai/install | bash
-    # xai.grok-4-1-fast-non-reasoning
-    cat << EOF > opencode.json
+
+    mkdir -p ~/.local/share/opencode
+
+    local base_url="https://inference.generativeai.us-chicago-1.oci.oraclecloud.com"
+    local model_name="xai.grok-4.3"
+
+    if [ -n "${TF_VAR_genai_endpoint_ocid:-}" ]; then
+        local oci_region
+        oci_region="$(printf '%s' "$TF_VAR_genai_endpoint_ocid" | cut -d. -f4)"
+        base_url="https://inference.generativeai.${oci_region}.oci.oraclecloud.com"
+        model_name="$TF_VAR_genai_endpoint_ocid"
+    fi
+
+    mkdir -p $HOME/.config/opencode
+    cat > $HOME/.config/opencode/opencode.json <<EOF
 {
   "\$schema": "https://opencode.ai/config.json",
   "provider": {
@@ -498,29 +512,31 @@ install_opencode() {
       "npm": "@ai-sdk/openai-compatible",
       "name": "OCI",
       "options": {
-        "baseURL": "https://inference.generativeai.us-chicago-1.oci.oraclecloud.com",
+        "baseURL": "${base_url}",
         "apiKey": "{env:TF_VAR_genai_api_key}"
       },
       "models": {
         "grok": {
-          "name": "xai.grok-4.3"
+          "name": "${model_name}"
         }
       }
     }
   }
 }
 EOF
-  
-    mkdir -p ~/.local/share/opencode
-    cat > ~/.local/share/opencode/auth.json << EOF
+    echo "<install_opencode> $HOME/.config/opencode/opencode.json created" 
+
+    cat > ~/.local/share/opencode/auth.json <<EOF
 {
   "oci": {
     "apiKey": "$TF_VAR_genai_api_key"
   }
 }
 EOF
-
     chmod 600 ~/.local/share/opencode/auth.json
+    echo "<install_opencode> $HOME/.local/share/opencode/auth.json created" 
+
+    export PATH=/home/opc/.opencode/bin:$PATH    
 }
 export -f install_opencode 
 
