@@ -5,6 +5,11 @@ const nextConfig = {
   devIndicators: false,
   output: 'standalone',
   compress: false,
+  // The configured endpoint OCID is a non-secret identifier required by the
+  // browser model selector. Explicitly expose this one value to client code.
+  env: {
+    TF_VAR_genai_endpoint_ocid: process.env.TF_VAR_genai_endpoint_ocid,
+  },  
   // Placeholder is only baked in production builds. The container's entrypoint
   // replaces it with the real BASE_PATH env var at runtime. In dev (`next dev`),
   // we skip it so everything works against localhost without needing the sed.
