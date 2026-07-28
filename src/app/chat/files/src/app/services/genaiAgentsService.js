@@ -9,10 +9,8 @@ import { MCPService } from './mcpService';
 
 const createGenaiAgentService = () => {
   const API_BASE_URL =
-    // Use the browser's current origin during local development. Next may move
-    // to another port when 3000 is occupied; an absolute localhost:3000 URL
-    // would then both cross origins and fail to connect.
-    process.env.NEXT_PUBLIC_GENAI_API_URL || "/api";
+    // hardcode the localhost, else it will fails if the Next.js app is accessed via a Load-Balancer or API Gateway
+    process.env.NEXT_PUBLIC_GENAI_API_URL || "http://localhost:3000/api";
   let conversationId = null;
 
   /**
