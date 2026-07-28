@@ -15,7 +15,6 @@ CONFIG_FILE = Path(os.getenv("APP_CONFIG_FILE", Path(__file__).with_name("config
 DEFAULT_AGENT_PROMPT = """You are an agent that use the tools you got access to.
 
 INSTRUCTIONS:
-- Assist ONLY with research-related tasks, DO NOT do any math.
 - When using a MCP tool, take care not to  pass empty parameters name like "", or {"":{}}
 - To draw a diagram, use mermaid.
 - For Mermaid bar charts, use the xychart diagram type, not a top-level "bar" diagram.
@@ -34,13 +33,8 @@ INSTRUCTIONS:
 
 CONFIG_FIELDS: list[dict[str, str]] = [
     {"name": "REGION", "label": "Region", "type": "LOV"},
-    {"name": "GENAI_MODEL", "label": "GenAI model", "type": "LOV"},
     {"name": "AGENT_PROMPT", "label": "Agent prompt", "type": "TEXTAREA"},
-    {"name": "VECTOR_STORE_ID", "label": "Vector store", "type": "LOV", "optional": "true"},
     {"name": "SEMANTIC_STORE_OCID", "label": "Semantic store", "type": "LOV", "optional": "true"},
-    {"name": "MCP_SERVER_URL", "label": "MCP server URL", "type": "TEXT", "optional": "true"},
-    {"name": "MCP_AUTH_TYPE", "label": "MCP authentication", "type": "LOV"},
-    {"name": "MCP_STATIC_BEARER_TOKEN", "label": "Static MCP bearer token", "type": "PASSWORD", "optional": "true"},
     {"name": "AUTH_TYPE", "label": "OCI authentication", "type": "LOV"},
 ]
 
@@ -60,8 +54,7 @@ OCI_REGIONS: list[dict[str, str]] = [
 ]
 FIXED_LOVS: dict[str, list[str]] = {
     "REGION": [region["id"] for region in OCI_REGIONS],
-    "AUTH_TYPE": ["INSTANCE_PRINCIPAL", "RESOURCE_PRINCIPAL"],
-    "MCP_AUTH_TYPE": ["BEARER_TOKEN_PROPAGATION", "NONE", "STATIC_BEARER_TOKEN"],
+    "AUTH_TYPE": ["CONFIG_FROM_FILE", "INSTANCE_PRINCIPAL", "RESOURCE_PRINCIPAL"],
 }
 
 _CONFIG_LOCK = threading.Lock()
@@ -76,13 +69,8 @@ class ConfigError(ValueError):
 def env_config() -> dict[str, str]:
     return {
         "REGION": os.getenv("REGION") or os.getenv("TF_VAR_region") or "eu-frankfurt-1",
-        "GENAI_MODEL": os.getenv("GENAI_MODEL") or "openai.gpt-oss-120b",
         "AGENT_PROMPT": os.getenv("AGENT_PROMPT") or DEFAULT_AGENT_PROMPT,
-        "VECTOR_STORE_ID": os.getenv("VECTOR_STORE_ID") or "",
         "SEMANTIC_STORE_OCID": os.getenv("SEMANTIC_STORE_OCID") or "",
-        "MCP_SERVER_URL": os.getenv("MCP_SERVER_URL") or "",
-        "MCP_AUTH_TYPE": os.getenv("MCP_AUTH_TYPE") or "BEARER_TOKEN_PROPAGATION",
-        "MCP_STATIC_BEARER_TOKEN": os.getenv("MCP_STATIC_BEARER_TOKEN") or "",
         "AUTH_TYPE": os.getenv("AUTH_TYPE") or "INSTANCE_PRINCIPAL",
     }
 
@@ -229,15 +217,9 @@ def get_dynamic_lov(
     field_name: str,
     values: dict[str, Any] | None = None,
 ) -> tuple[list[str], dict[str, str]]:
-    if field_name == "VECTOR_STORE_ID":
-        update_config_for_lov(values)
-        return get_vector_stores()
     if field_name == "SEMANTIC_STORE_OCID":
         update_config_for_lov(values)
         return get_semantic_stores()
-    if field_name == "GENAI_MODEL":
-        update_config_for_lov(values)
-        return get_genai_models()
     return [], {}
 
 
@@ -331,6 +313,18 @@ async def read_configuration_lov(
 def _build_oci_signer(auth_type: str) -> Any:
     if auth_type == "RESOURCE_PRINCIPAL":
         return oci.auth.signers.get_resource_principals_signer()
+    if auth_type == "CONFIG_FROM_FILE":
+        config_file = os.getenv("OCI_CONFIG_FILE", "~/.oci/config")
+        profile = os.getenv("OCI_CONFIG_PROFILE", "DEFAULT")
+        oci_config = oci.config.from_file(config_file, profile)
+        return oci.signer.Signer(
+            tenancy=oci_config["tenancy"],
+            user=oci_config["user"],
+            fingerprint=oci_config["fingerprint"],
+            private_key_file_location=oci_config.get("key_file"),
+            pass_phrase=oci.config.get_config_value_or_default(oci_config, "pass_phrase"),
+            private_key_content=oci_config.get("key_content"),
+        )
     return oci.auth.signers.InstancePrincipalsSecurityTokenSigner()
 
 
@@ -348,6 +342,12 @@ def inference_client() -> Any:
 def _build_openai_auth() -> Any:
     if config("AUTH_TYPE") == "RESOURCE_PRINCIPAL":
         return oci_openai.OciResourcePrincipalAuth()
+    if config("AUTH_TYPE") == "CONFIG_FROM_FILE":
+        from oci_genai_auth import OciUserPrincipalAuth
+        return OciUserPrincipalAuth(
+            config_file=os.getenv("OCI_CONFIG_FILE", "~/.oci/config"),
+            profile_name=os.getenv("OCI_CONFIG_PROFILE", "DEFAULT"),
+        )
     return oci_openai.OciInstancePrincipalAuth()
 
 
@@ -356,10 +356,15 @@ def openai_client() -> OpenAI:
     auth_type = config("AUTH_TYPE")
     compartment_ocid = config("COMPARTMENT_OCID")
 
-    from oci_genai_auth import OciInstancePrincipalAuth, OciResourcePrincipalAuth
+    from oci_genai_auth import OciInstancePrincipalAuth, OciResourcePrincipalAuth, OciUserPrincipalAuth
 
     if auth_type == "RESOURCE_PRINCIPAL":
         auth = OciResourcePrincipalAuth()
+    elif auth_type == "CONFIG_FROM_FILE":
+        auth = OciUserPrincipalAuth(
+            config_file=os.getenv("OCI_CONFIG_FILE", "~/.oci/config"),
+            profile_name=os.getenv("OCI_CONFIG_PROFILE", "DEFAULT"),
+        )
     else:
         auth = OciInstancePrincipalAuth()
 

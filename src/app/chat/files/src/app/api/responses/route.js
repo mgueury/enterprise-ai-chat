@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { appendFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
 import { ociRequest } from '../../lib/oci-proxy';
 import { Langfuse } from 'langfuse';
 import { createLogger } from '../../lib/logger';
@@ -16,12 +17,95 @@ const appendRawEvent = RAW_EVENTS_FILE
     }
   : () => {};
 
+// Keep a complete, per-call copy of the OCI Responses request and raw SSE
+// response. This is intentionally always enabled for this application: the
+// resulting files are runtime diagnostics and are excluded from source control.
+// They can include prompts, tool arguments, and tool output, so protect the
+// directory as sensitive operational data.
+const RESPONSES_LOG_DIR = path.join(process.cwd(), 'log');
+
+// By default this route calls the co-located LangGraph REST application. Set
+// RESPONSES_BACKEND=oci to use OCI Responses directly instead. Both the REST
+// URL and its optional authorization value are server-only and are never
+// exposed to browser code.
+const RESPONSES_BACKEND = (process.env.RESPONSES_BACKEND || 'rest').toLowerCase();
+const REST_RESPONSES_URL = process.env.REST_RESPONSES_URL || 'http://127.0.0.1:8080/responses';
+const REST_RESPONSES_AUTHORIZATION = process.env.REST_RESPONSES_AUTHORIZATION
+  // The bundled REST service listens on loopback in local development and
+  // supports this explicit development-only identity. Production must provide
+  // a real REST credential through REST_RESPONSES_AUTHORIZATION.
+  || (process.env.NODE_ENV !== 'production' ? 'User local-dev' : '');
+
+async function requestResponses(request, requestBody, basePath) {
+  if (RESPONSES_BACKEND !== 'rest') {
+    return ociRequest('POST', '/responses', {
+      body: requestBody,
+      basePath,
+      extraHeaders: { accept: 'text/event-stream' },
+    });
+  }
+
+  if (!REST_RESPONSES_URL) {
+    throw new Error('RESPONSES_BACKEND=rest requires REST_RESPONSES_URL');
+  }
+
+  // REST validates its own Authorization header. Forward one supplied by an
+  // API caller, or use an explicitly configured server-side value for trusted
+  // deployments/dev. Do not forward the browser session cookie.
+  const authorization = request.headers.get('authorization') || REST_RESPONSES_AUTHORIZATION;
+  const headers = {
+    accept: 'text/event-stream',
+    'content-type': 'application/json',
+  };
+  if (authorization) headers.authorization = authorization;
+
+  return fetch(REST_RESPONSES_URL, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(requestBody),
+    signal: request.signal,
+  });
+}
+
+function createResponseApiLog(requestId) {
+  const requestedAt = new Date();
+  const prefix = `${requestedAt.toISOString().replace(/[:.]/g, '-')}-${requestId}`;
+  const requestPath = path.join(RESPONSES_LOG_DIR, `${prefix}-request.json`);
+  const responsePath = path.join(RESPONSES_LOG_DIR, `${prefix}-response.jsonl`);
+
+  const write = (file, content) => {
+    try {
+      mkdirSync(RESPONSES_LOG_DIR, { recursive: true });
+      writeFileSync(file, content);
+    } catch {
+      // Logging must never prevent a chat response from being served.
+    }
+  };
+  const append = (entry) => {
+    try {
+      mkdirSync(RESPONSES_LOG_DIR, { recursive: true });
+      appendFileSync(responsePath, `${JSON.stringify({ at: new Date().toISOString(), ...entry })}\n`);
+    } catch {
+      // Logging must never prevent a chat response from being served.
+    }
+  };
+
+  write(requestPath, `${JSON.stringify({ requestId, requestedAt: requestedAt.toISOString() }, null, 2)}\n`);
+  append({ type: 'response_log_started', requestId });
+
+  return {
+    writeRequest: (entry) => write(requestPath, `${JSON.stringify({ requestId, requestedAt: requestedAt.toISOString(), ...entry }, null, 2)}\n`),
+    append,
+  };
+}
+
 // Allow long-running MCP tool calls (up to 5 minutes)
 export const maxDuration = 300;
 
 export async function POST(request) {
   const requestId = crypto.randomUUID();
   const log = createLogger('responses-api', { requestId });
+  const responseApiLog = createResponseApiLog(requestId);
 
   // Declared outside the try block: the catch references these, and `let` inside
   // the try is not in scope there — any pre-stream failure would die with a
@@ -32,8 +116,12 @@ export async function POST(request) {
 
   try {
     const { input, conversationId, model, systemPrompt, tools, reasoning, previousResponseId } = await request.json();
+    responseApiLog.writeRequest({
+      clientRequest: { input, conversationId, model, systemPrompt, tools, reasoning, previousResponseId },
+    });
 
     if (!input) {
+      responseApiLog.append({ type: 'client_error', status: 400, body: { error: 'Input is required' } });
       return NextResponse.json({ error: 'Input is required' }, { status: 400 });
     }
 
@@ -74,6 +162,12 @@ export async function POST(request) {
     // Add MCP tools if provided (OCI handles execution natively)
     if (tools && Array.isArray(tools) && tools.length > 0) {
       requestBody.tools = tools;
+      // ``semantic_store`` is REST-facade configuration, not an OCI Responses
+      // tool. Preserve it for REST while preventing OCI from rejecting it.
+      if (RESPONSES_BACKEND === 'oci') {
+        requestBody.tools = requestBody.tools.filter(tool => tool?.type !== 'semantic_store');
+        if (requestBody.tools.length === 0) delete requestBody.tools;
+      }
     }
 
     // Add reasoning params (effort + summary) — only for reasoning-capable models
@@ -94,7 +188,18 @@ export async function POST(request) {
       if (requestBody.conversation) delete requestBody.conversation;
     }
 
-    log.info('OCI request payload', {
+    responseApiLog.writeRequest({
+      clientRequest: { input, conversationId, model, systemPrompt, tools, reasoning, previousResponseId },
+      upstreamRequest: {
+        backend: RESPONSES_BACKEND,
+        method: 'POST',
+        path: RESPONSES_BACKEND === 'rest' ? REST_RESPONSES_URL : `${basePath}/responses`,
+        body: requestBody,
+      },
+    });
+
+    log.info('Responses request payload', {
+      backend: RESPONSES_BACKEND,
       model: requestBody.model,
       hasInstructions: !!requestBody.instructions,
       instructionsLen: requestBody.instructions?.length || 0,
@@ -125,18 +230,21 @@ export async function POST(request) {
       });
     }
 
-    let response = await ociRequest('POST', '/responses', {
-      body: requestBody,
-      basePath,
-      extraHeaders: { accept: 'text/event-stream' },
-    });
+    let response = await requestResponses(request, requestBody, basePath);
 
     // Log OCI request ID for debugging/support
     const opcRequestId = response.headers.get('opc-request-id');
+    responseApiLog.append({
+      type: 'oci_response_started',
+      status: response.status,
+      statusText: response.statusText,
+      opcRequestId,
+    });
     if (opcRequestId) log.info('OCI request started', { opcRequestId });
 
     if (!response.ok) {
       const errorText = await response.text();
+      responseApiLog.append({ type: 'oci_response_error', status: response.status, body: errorText, opcRequestId });
       log.error('OCI API error', { status: response.status, body: errorText.slice(0, 4000), opcRequestId });
 
       // MCP tool auth expired — tell client to re-authorize
@@ -172,20 +280,30 @@ export async function POST(request) {
         );
       }
       // Retry without file_search if a VectorStore is not found (stale/deleted VS)
-      else if (response.status === 400 && errorText.includes('VectorStore') && errorText.includes('not found') && requestBody.tools?.some(t => t.type === 'file_search')) {
+      else if (RESPONSES_BACKEND === 'oci' && response.status === 400 && errorText.includes('VectorStore') && errorText.includes('not found') && requestBody.tools?.some(t => t.type === 'file_search')) {
         log.warn('Retrying without file_search (stale vector store)');
         requestBody.tools = requestBody.tools.filter(t => t.type !== 'file_search');
         if (requestBody.tools.length === 0) delete requestBody.tools;
 
-        response = await ociRequest('POST', '/responses', {
+        responseApiLog.append({
+          type: 'oci_request_retry',
+          method: 'POST',
+          path: `${basePath}/responses`,
           body: requestBody,
-          basePath,
-          extraHeaders: { accept: 'text/event-stream' },
+        });
+
+        response = await requestResponses(request, requestBody, basePath);
+        responseApiLog.append({
+          type: 'oci_response_retry_started',
+          status: response.status,
+          statusText: response.statusText,
+          opcRequestId: response.headers.get('opc-request-id'),
         });
 
         if (!response.ok) {
           const retryError = await response.text();
           const retryOpc = response.headers.get('opc-request-id');
+          responseApiLog.append({ type: 'oci_response_retry_error', status: response.status, body: retryError, opcRequestId: retryOpc });
           return NextResponse.json({
             error: `OCI API Error: ${response.status} - ${retryError}`,
             opc_request_id: retryOpc,
@@ -409,6 +527,7 @@ export async function POST(request) {
 
             const elapsed = Date.now() - startTime;
             const chunk = decoder.decode(value, { stream: true });
+            responseApiLog.append({ type: 'oci_sse_chunk', elapsed, chunk });
             log.debug('Chunk received', { elapsed, bytes: chunk.length });
 
             buffer += chunk;
@@ -638,6 +757,7 @@ export async function POST(request) {
                   // can show queries/vector_stores/chunk count instead of just "File Search"
                   else if (itemType === 'file_search_call') {
                     const queries = data.item.queries || [];
+                    const results = Array.isArray(data.item.results) ? data.item.results : [];
                     const fsToolCfgs = (tools || []).filter(t => t.type === 'file_search');
                     const vsIdsForCfg = fsToolCfgs.flatMap(t => t.vector_store_ids || []);
                     const maxNumResults = fsToolCfgs[0]?.max_num_results || null;
@@ -652,7 +772,7 @@ export async function POST(request) {
                         tool: 'file_search',
                         server: 'file_search',
                         output: summary,
-                        arguments: JSON.stringify({ queries, vector_store_ids: vsIdsForCfg, max_num_results: maxNumResults }),
+                        arguments: JSON.stringify({ queries, vector_store_ids: vsIdsForCfg, max_num_results: maxNumResults, results }),
                       }
                     }) + '\n'));
                   }
@@ -1038,10 +1158,10 @@ export async function POST(request) {
                     }) + '\n'));
                   }
 
-                  // OCI returns file_search_call with results: null. Re-run the search ourselves
-                  // against the vector_store(s) attached to this request so we can emit the
-                  // matching documents as `file_citation` annotations the UI renders as chips.
-                  // Each citation carries `file_search_call_id` so the chip can count chunks per call.
+                  // Prefer the included file_search_call results. They contain the exact
+                  // chunks selected by OCI and avoid a second, potentially different search.
+                  // Older model responses may omit them, in which case the API search below
+                  // remains a compatibility fallback.
                   //
                   // Fallback for queries: Grok runs file_search but leaves the `queries` field
                   // empty on the call item (semantic search keyed off the conversation rather
@@ -1071,9 +1191,30 @@ export async function POST(request) {
                       return fallback ? { ...fs, _queries: [fallback] } : null;
                     })
                     .filter(Boolean);
-                  if (fsCalls.length > 0 && vsIds.length > 0) {
-                    const fsCitations = [];
-                    const seen = new Set();
+                  const fsCitations = [];
+                  const seen = new Set();
+                  for (const fs of fsCalls) {
+                    for (const result of (Array.isArray(fs.results) ? fs.results : [])) {
+                      if (!result?.file_id) continue;
+                      const snippet = (result.text || result.content || '').toString().slice(0, 3000);
+                      const key = `${fs.id}::${result.file_id}::${result.chunk_id || ''}::${snippet.slice(0, 80)}`;
+                      if (seen.has(key)) continue;
+                      seen.add(key);
+                      fsCitations.push({
+                        type: 'file_citation',
+                        file_id: result.file_id,
+                        filename: result.filename,
+                        score: result.score,
+                        snippet,
+                        vector_store_id: result.vector_store_id,
+                        query: fs._queries[0],
+                        file_search_call_id: fs.id,
+                        chunk_id: result.chunk_id,
+                        pages: result.pages || [],
+                      });
+                    }
+                  }
+                  if (fsCitations.length === 0 && fsCalls.length > 0 && vsIds.length > 0) {
                     await Promise.all(
                       fsCalls.flatMap(fs => fs._queries.flatMap(query =>
                         vsIds.map(async (vsId) => {
@@ -1111,12 +1252,12 @@ export async function POST(request) {
                         })
                       ))
                     );
-                    if (fsCitations.length > 0) {
-                      // Highest score first
-                      fsCitations.sort((a, b) => (b.score || 0) - (a.score || 0));
-                      log.info('Emitting file_search source citations', { count: fsCitations.length });
-                      controller.enqueue(encoder.encode(JSON.stringify({ annotations: fsCitations }) + '\n'));
-                    }
+                  }
+                  if (fsCitations.length > 0) {
+                    // Highest score first
+                    fsCitations.sort((a, b) => (b.score || 0) - (a.score || 0));
+                    log.info('Emitting file_search source citations', { count: fsCitations.length });
+                    controller.enqueue(encoder.encode(JSON.stringify({ annotations: fsCitations }) + '\n'));
                   }
 
                   // Extract all annotations
@@ -1213,6 +1354,16 @@ export async function POST(request) {
           }
 
           const elapsed = Date.now() - startTime;
+          responseApiLog.append({
+            type: 'oci_response_finished',
+            elapsed,
+            responseCompleted,
+            eventCount,
+            lastEventType,
+            stalled,
+            opcRequestId,
+            text: fullOutputText,
+          });
           log.info('Stream ended', { elapsed, toolCalls: toolCalls.length, textLength: fullOutputText.length, responseCompleted, eventCount, lastEventType, stalled, opcRequestId });
 
           // Finalize completed response: check orphaned tools and emit done:true.
@@ -1290,6 +1441,7 @@ export async function POST(request) {
 
   } catch (error) {
     log.error('Unhandled error', { error: error.message, stack: error.stack });
+    responseApiLog.append({ type: 'server_error', message: error.message, stack: error.stack });
     // Log error to LangFuse if available
     if (langfuseGeneration) {
       try {

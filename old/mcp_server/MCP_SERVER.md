@@ -1,8 +1,5 @@
 Useful commands
 ----------------
-`get_dept` returns a fixed, database-independent copy of the four classic
-Oracle `DEPT` rows: ACCOUNTING, RESEARCH, SALES, and OPERATIONS.
-
 export MCP_SERVER_URL=http://localhost:2025/mcp/
 
 ---

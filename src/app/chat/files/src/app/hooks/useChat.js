@@ -8,7 +8,6 @@ import { groupMessages, parseContentWithWidgets } from "../utils/messageUtils";
 import { createWidgetStreamParser } from "../utils/widgetParser";
 import { createWidgetV2StreamParser, serializeWidgetV2Tree } from "../utils/widgetV2Parser";
 import { splitMcpFunctionName } from "../lib/mcp-fn-name";
-import { isReadOnlySql } from "../lib/sqlGuard";
 import { withBase } from "@/lib/withBase";
 
 // Friendly names for OCI internal tools
@@ -843,19 +842,6 @@ export default function useChat({ initialConversationId = null, selectedModel, o
           return label === serverLabel;
         });
         if (found) return found;
-        // Text-to-SQL is the DBTools MCP pseudo-server (label "OracleDB"), attached
-        // from env + Settings rather than mcpServers. When OCI delegates its tool
-        // call instead of running it natively, synthesize the config so the chain
-        // executor can run it through /api/mcp — the oauth2.1 cookie already
-        // exists (the user authorized from Settings → Tools → Text to SQL).
-        if (serverLabel === 'Nl2Sql' && process.env.NEXT_PUBLIC_NL2SQL_MCP_URL) {
-          return {
-            id: 'nl2sql-native',
-            name: 'Nl2Sql',
-            endpoint: process.env.NEXT_PUBLIC_NL2SQL_MCP_URL,
-            authType: 'oauth2.1',
-          };
-        }
         return undefined;
       };
 
@@ -895,8 +881,8 @@ export default function useChat({ initialConversationId = null, selectedModel, o
       let chainDepth = 0;
       const MAX_CHAIN_DEPTH = 5;
       let needsAuthFor = null; // { name, endpoint, authType } when an MCP server needs OAuth
-      // Models retry a failed tool with the SAME arguments over and over (seen
-      // live: 3 identical generate_sql calls per turn). Executing identical
+      // Models retry a failed tool with the SAME arguments over and over.
+      // Executing identical
       // failures again wastes calls and floods the chat with chips; replay the
       // recorded failure instead and tell the model not to insist.
       const failedChainCalls = new Map(); // `${server}::${tool}::${args}` → output
@@ -944,85 +930,6 @@ export default function useChat({ initialConversationId = null, selectedModel, o
           } else if (!server) {
             output = JSON.stringify({ error: `Server '${fc.server_label}' not configured` });
             toolFailed = true;
-          } else if (fc.tool_name === 'generate_sql') {
-            // NL2SQL two-step (guide §1.5 generate + execution): the model called
-            // generate_sql, so generate the SQL from the NL question via the data
-            // plane (/api/nl2sql), gate it as read-only, then run it through the
-            // DBTools `sql_run` tool. We answer the model with the actual rows.
-            try {
-              const nlq = parsedArgs.inputNaturalLanguageQuery || parsedArgs.query || parsedArgs.input || '';
-              let storeId = parsedArgs?.metadata?.semanticStoreId || parsedArgs.semanticStoreId || '';
-              if (!storeId) {
-                try { storeId = (JSON.parse(localStorage.getItem('nl2sqlSemanticStoreIds') || '[]'))[0] || ''; } catch { /* ignore */ }
-              }
-              const genRes = await fetch('/api/nl2sql', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ question: nlq, semanticStoreId: storeId }),
-              });
-              const genData = await genRes.json();
-              if (!genRes.ok || !genData.sql) {
-                output = JSON.stringify({ error: genData.error || 'SQL generation failed' });
-                toolFailed = true;
-              } else if (!isReadOnlySql(genData.sql)) {
-                output = JSON.stringify({ sql: genData.sql, error: 'Generated SQL is not a single read-only SELECT; not executed.' });
-                toolFailed = true;
-              } else {
-                const sessionId = await ensureChainSession(server);
-                const runSql = async () => {
-                  const r = await fetch('/api/mcp', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      endpoint: server.endpoint,
-                      method: 'tools/call',
-                      params: { name: 'sql_run', arguments: { source: genData.sql } },
-                      ...(sessionId ? { sessionId } : {}),
-                      authType: server.authType,
-                      authKey: server.authKey,
-                      oauth: server.oauth,
-                    }),
-                  });
-                  return { status: r.status, data: await r.json() };
-                };
-                // One-shot retry: sql_run occasionally hits a transient JSON-RPC
-                // error (an OAuth-token blip during refresh, or -32603). The SELECT
-                // is read-only/idempotent, so re-running once is safe and makes the
-                // flow resilient. We do NOT retry a real 401 needs_auth (that means
-                // re-authorize, not retry).
-                let exec = await runSql();
-                if (exec.data?.error && !(exec.status === 401 && exec.data.error === 'needs_auth')) {
-                  exec = await runSql();
-                }
-                const execData = exec.data;
-                if (exec.status === 401 && execData.error === 'needs_auth') {
-                  authRequired = true;
-                  needsAuthFor = { name: server.name, endpoint: server.endpoint, authType: server.authType };
-                } else if (execData.result?.content) {
-                  const rows = execData.result.content.map(c => c.text || JSON.stringify(c)).join('\n');
-                  output = JSON.stringify({ sql: genData.sql, result: rows });
-                  if (execData.result.isError) toolFailed = true;
-                } else if (execData.error) {
-                  const msg = (execData.error.message || JSON.stringify(execData.error) || '').toString();
-                  // A stale OAuth token comes back as a JSON-RPC error (HTTP 200),
-                  // not a 401, so the proxy doesn't flag needs_auth. Detect the
-                  // auth-failure message and surface the Authorize banner so the
-                  // user can re-login — instead of a dead error they can't recover.
-                  if (/authoriz|unauthentic|invalid[_ ]?token|token (?:expired|invalid)|401/i.test(msg)) {
-                    authRequired = true;
-                    needsAuthFor = { name: server.name, endpoint: server.endpoint, authType: server.authType };
-                  } else {
-                    output = JSON.stringify({ sql: genData.sql, error: msg });
-                    toolFailed = true;
-                  }
-                } else {
-                  output = JSON.stringify({ sql: genData.sql, result: execData });
-                }
-              }
-            } catch (err) {
-              output = JSON.stringify({ error: err.message || String(err) });
-              toolFailed = true;
-            }
           } else {
             try {
               const sessionId = await ensureChainSession(server);

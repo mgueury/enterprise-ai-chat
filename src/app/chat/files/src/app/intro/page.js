@@ -81,7 +81,7 @@ export default function IntroPage() {
         </Typography>
       </motion.div>
 
-      {/* BLACK BELTS LAB chip */}
+      {/* AI ENGINEERS LAB chip */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -89,7 +89,7 @@ export default function IntroPage() {
         style={{ marginTop: 16 }}
       >
         <Chip
-          label="BLACK BELTS LAB"
+          label="AI ENGINEERS LAB"
           size="small"
           variant="outlined"
           sx={{

@@ -1389,15 +1389,6 @@ const ChatMessage = memo(function ChatMessage({
               if (!server && enabled.length === 1) {
                 server = enabled[0];
               }
-              // OracleDB is the native Text-to-SQL pseudo-server — it never lives in
-              // mcpServers, so synthesize it from env. Without this, clicking
-              // Authorize crashed on buildAuthorizeUrl(null).
-              if (!server) {
-                const nl2sqlUrl = process.env.NEXT_PUBLIC_NL2SQL_MCP_URL || '';
-                if (nl2sqlUrl && (group.serverLabel === 'Nl2Sql' || group.serverEndpoint === nl2sqlUrl)) {
-                  server = { name: 'Nl2Sql', endpoint: nl2sqlUrl, authType: 'oauth2.1' };
-                }
-              }
               if (typeof window !== 'undefined' && !window.__mcp_banner_logged) {
                 window.__mcp_banner_logged = true;
                 console.log('[mcp banner]', {

@@ -1,10 +1,17 @@
-import os
 from typing import Any
 
-import oracledb
 from fastmcp import FastMCP  # Import FastMCP, the quickstart server base
 
 mcp = FastMCP("MCP Server")  # Initialize an MCP server instance with a descriptive name
+
+# The canonical sample data from Oracle's classic SCOTT.DEPT table.  This demo
+# MCP server intentionally has no database dependency.
+DEPARTMENTS: tuple[dict[str, Any], ...] = (
+    {"deptno": 10, "dname": "ACCOUNTING", "loc": "NEW YORK"},
+    {"deptno": 20, "dname": "RESEARCH", "loc": "DALLAS"},
+    {"deptno": 30, "dname": "SALES", "loc": "CHICAGO"},
+    {"deptno": 40, "dname": "OPERATIONS", "loc": "BOSTON"},
+)
 
 def log( s ): 
     print( s, flush=True )
@@ -22,26 +29,9 @@ def send_email(to: str, subject: str, body: str) -> dict[str, str]:
 
 @mcp.tool()
 def get_dept() -> list[dict[str, Any]]:
-    """Return all rows from the DEPT table."""
+    """Return the four static sample rows from Oracle's classic DEPT table."""
     log( "<get_dept>")
-    user = os.getenv("DB_USER")
-    password = os.getenv("DB_PASSWORD")
-    dsn = os.getenv("DB_URL")
-
-    if not user or not password or not dsn:
-        raise ValueError("Missing DB_USER, DB_PASSWORD, or DB_URL environment variable")
-
-    connection = oracledb.connect(user=user, password=password, dsn=dsn)
-    log( "<get_dept>: connected to db")
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT DEPTNO, DNAME, LOC FROM DEPT ORDER BY DEPTNO")
-            rows = cursor.fetchall()
-            return [
-                {"deptno": deptno, "dname": dname, "loc": loc}
-                for deptno, dname, loc in rows
-            ]
-    finally:
-        connection.close()
+    # Return new dictionaries so a tool consumer cannot alter the module data.
+    return [department.copy() for department in DEPARTMENTS]
 if __name__ == "__main__":
     mcp.run(transport="http", host="0.0.0.0", port=2025)

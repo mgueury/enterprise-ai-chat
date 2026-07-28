@@ -7,11 +7,12 @@ from langchain_mcp_adapters.interceptors import MCPToolCallRequest
 import asyncio
 import os
 import pprint
+import re
 import httpx
 import oci_openai 
 from typing import Any
 from config import DEFAULT_AGENT_PROMPT, config
-from search import get_search_tools
+from search import get_oci_tools
 
 def build_llm_openai():
     auth = oci_openai.OciInstancePrincipalAuth()
@@ -25,13 +26,23 @@ def build_llm_openai():
         ),
     )
 
-def build_llm() -> ChatOCIGenAI:
+def inference_region_for_model(model_id: str, default_region: str) -> str:
+    """Use the endpoint OCID's region when the model is a dedicated endpoint."""
+    match = re.match(r"^ocid1\.generativeaiendpoint\.oc1\.([a-z0-9-]+)\.", model_id)
+    return match.group(1) if match else default_region
+
+
+def build_llm(model_id: str) -> ChatOCIGenAI:
+    auth_type = "API_KEY" if config("AUTH_TYPE") == "CONFIG_FROM_FILE" else config("AUTH_TYPE")
+    region = inference_region_for_model(model_id, config("REGION"))
     return ChatOCIGenAI(
-        auth_type="API_KEY" if "LIVELABS" in os.environ else config("AUTH_TYPE"),
-        model_id=config("GENAI_MODEL"),
+        auth_type="API_KEY" if "LIVELABS" in os.environ else auth_type,
+        auth_profile=os.getenv("OCI_CONFIG_PROFILE", "DEFAULT"),
+        auth_file_location=os.getenv("OCI_CONFIG_FILE", "~/.oci/config"),
+        model_id=model_id,
         # model_id="meta.llama-4-scout-17b-16e-instruct",
         # model_id="cohere.command-a-03-2025",
-        service_endpoint="https://inference.generativeai."+config("REGION")+".oci.oraclecloud.com",
+        service_endpoint="https://inference.generativeai." + region + ".oci.oraclecloud.com",
         # model_id="xai.grok-4.3",
         # service_endpoint="https://inference.generativeai.us-chicago-1.oci.oraclecloud.com",
         compartment_id=config("COMPARTMENT_OCID"),
@@ -51,30 +62,17 @@ def remove_empty_parameter_names(args: dict[str, Any] | None) -> dict[str, Any]:
         if isinstance(key, str) and key.strip()
     }
 
-# See https://docs.langchain.com/oss/python/langchain/mcp#accessing-runtime-context
 async def inject_user_context(
     request: MCPToolCallRequest,
     handler,
 ):
-    """Inject user credentials into MCP tool calls and keep agent runs alive on tool errors."""
-    print( "--- request ----" )
-    pprint.pprint( request )
-    runtime = request.runtime
-    user_id = runtime.config["configurable"]["user_id"]
-    auth_user = runtime.config["configurable"]["langgraph_auth_user"]
-    auth_header = auth_user.dict().get("auth_header")
-    print( f"<inject_user_context> user_id={user_id}", flush=True )
-    # print( f"<inject_user_context> auth_header={auth_header}", flush=True )
-    # modified_request = request.override( headers = { "Authorization": f"User {user_id}" } )
+    """Clean MCP arguments and turn MCP failures into agent-visible results.
+
+    MCP credentials are set on the per-request server connection. Never replace
+    those headers here with REST endpoint credentials or static configuration.
+    """
     cleaned_args = remove_empty_parameter_names(request.args)
-    # Forward the original request credentials to every MCP tool call.
-    if config("MCP_AUTH_TYPE")=="STATIC_BEARER_TOKEN":
-        headers = {"Authorization": "Bearer " + config("MCP_STATIC_BEARER_TOKEN") }
-    elif config("MCP_AUTH_TYPE")=="NONE" and not auth_header:
-        headers = {}
-    else:
-        headers = {"Authorization": auth_header}
-    modified_request = request.override(args=cleaned_args, headers=headers)
+    modified_request = request.override(args=cleaned_args)
     try:
         return await handler(modified_request)
     except Exception as first_error:
@@ -101,16 +99,25 @@ async def inject_user_context(
             "guidance": "Tool call failed. Adjust parameters based on this error and retry with corrected values.",
         }
 
-async def init( agent_name, prompt, callback_handler=None ) -> StateGraph:
+async def init(
+    agent_name: str,
+    prompt: str,
+    model_id: str,
+    vector_store_ids: tuple[str, ...],
+    semantic_store_ids: tuple[str, ...],
+    code_interpreter_enabled: bool,
+    mcp_servers: tuple[tuple[str, str, str | None], ...],
+    callback_handler=None,
+) -> StateGraph:
 
     # Build the graph once at process startup; app.py streams runs from this object.
     # Waiting is important, since after reboot the MCP server could start afterwards.
     delay = 10
     client = None
-    agent_tools = list(get_search_tools())
-    llm = build_llm()
-    if not config("MCP_SERVER_URL"):
-        print("MCP_SERVER_URL is not configured; starting agent without MCP tools")
+    agent_tools = list(get_oci_tools(model_id, vector_store_ids, semantic_store_ids, code_interpreter_enabled))
+    llm = build_llm(model_id)
+    if not mcp_servers:
+        print("No MCP tools supplied by the Responses request; starting agent without MCP tools")
         return create_react_agent(
             model=llm,
             tools=agent_tools,
@@ -123,10 +130,12 @@ async def init( agent_name, prompt, callback_handler=None ) -> StateGraph:
             print(f"Connecting to MCP {attempt}...")
             client = MultiServerMCPClient(
                 {
-                    "McpServer": {
+                    label: {
                         "transport": "streamable_http",
-                        "url": config("MCP_SERVER_URL"),
-                    },
+                        "url": url,
+                        **({"headers": {"Authorization": bearer_token}} if bearer_token else {}),
+                    }
+                    for label, url, bearer_token in mcp_servers
                 },
                 tool_interceptors=[inject_user_context],
             )
@@ -153,26 +162,54 @@ async def init( agent_name, prompt, callback_handler=None ) -> StateGraph:
     ) 
     return agent    
 
-async def build_agent() -> StateGraph:
-    return await init("agent", config("AGENT_PROMPT") or DEFAULT_AGENT_PROMPT)
+async def build_agent(
+    model_id: str,
+    vector_store_ids: tuple[str, ...],
+    semantic_store_ids: tuple[str, ...],
+    code_interpreter_enabled: bool,
+    mcp_servers: tuple[tuple[str, str, str | None], ...],
+) -> StateGraph:
+    return await init(
+        "agent",
+        config("AGENT_PROMPT") or DEFAULT_AGENT_PROMPT,
+        model_id,
+        vector_store_ids,
+        semantic_store_ids,
+        code_interpreter_enabled,
+        mcp_servers,
+    )
 
 
 class AgentRuntime:
-    def __init__(self, graph: StateGraph):
-        self._graph = graph
+    def __init__(self):
+        self._graphs: dict[tuple[str, tuple[str, ...], tuple[str, ...], bool, tuple[tuple[str, str, str | None], ...]], StateGraph] = {}
         self._reload_lock = asyncio.Lock()
 
-    async def astream(self, *args, **kwargs):
-        graph = self._graph
+    async def astream(
+        self,
+        *args,
+        model_id: str,
+        vector_store_ids: tuple[str, ...],
+        semantic_store_ids: tuple[str, ...],
+        code_interpreter_enabled: bool,
+        mcp_servers: tuple[tuple[str, str, str | None], ...],
+        **kwargs,
+    ):
+        async with self._reload_lock:
+            graph_key = (model_id, vector_store_ids, semantic_store_ids, code_interpreter_enabled, mcp_servers)
+            graph = self._graphs.get(graph_key)
+            if graph is None:
+                graph = await build_agent(model_id, vector_store_ids, semantic_store_ids, code_interpreter_enabled, mcp_servers)
+                self._graphs[graph_key] = graph
         async for state in graph.astream(*args, **kwargs):
             yield state
 
     async def reload(self) -> None:
         async with self._reload_lock:
-            self._graph = await build_agent()
+            self._graphs.clear()
 
 
-agent = AgentRuntime(asyncio.run(build_agent()))
+agent = AgentRuntime()
 
 
 async def reload_agent_config() -> None:

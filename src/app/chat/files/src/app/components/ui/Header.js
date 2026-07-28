@@ -174,7 +174,7 @@ export default function Header({
             </Typography>
             {showLabChip && (
               <Chip
-                label="BLACK BELTS LAB"
+                label="AI ENGINEERS LAB"
                 size="small"
                 variant="outlined"
                 sx={{

@@ -262,6 +262,8 @@ export default function Home({ initialConversationId = null }) {
       "google.gemini-2.5-flash",
       "google.gemini-2.5-flash-lite",
       "google.gemini-2.5-pro",
+      // Gemma
+      "ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q",
       // Internal-only entries (empty array on the public branch)
       ...INTERNAL_MODELS,
     ];

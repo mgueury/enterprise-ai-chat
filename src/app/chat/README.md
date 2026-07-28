@@ -51,6 +51,28 @@ USE_RESOURCE_PRINCIPAL=true
 # NEXT_PUBLIC_GENAI_API_URL=https://your-apigw.example.com/api
 ```
 
+### Responses backend
+
+The chat API uses the bundled LangGraph REST service by default, at
+`http://127.0.0.1:8080/responses`. To use OCI Responses directly instead, set
+`RESPONSES_BACKEND=oci`. The REST endpoint and authorization can be overridden
+with these **server-side** values:
+
+```env
+RESPONSES_BACKEND=rest
+REST_RESPONSES_URL=http://rest-host:8080/responses
+
+# Required when the incoming /api/responses request has no Authorization header.
+# Use a REST service credential suitable for the deployment; `User someone` is
+# supported only by the REST service's existing development authentication mode.
+REST_RESPONSES_AUTHORIZATION=Bearer <token>
+```
+
+`REST_RESPONSES_URL` and `REST_RESPONSES_AUTHORIZATION` are never exposed to
+the browser. The REST backend emits a smaller Responses-compatible SSE stream:
+text, response IDs, conversation IDs, and completion are preserved, while
+OCI-native tool approvals and tool activity events are not emulated.
+
 > **About the Project.** A **Project** is the OCI Generative AI resource that organizes conversations, responses, files, and sandboxes: it's required for any OpenAI-compatible API call. It's also where you configure data retention (max 720h for both responses and conversations), short-term memory compaction, and long-term memory extraction/embedding models. Memory and compaction settings are **set at project creation and cannot be changed later**, so plan ahead. Create one in the OCI Console under *Analytics & AI → Generative AI → Projects*.
 
 ### SSO (Oracle IDCS), optional but recommended
@@ -73,13 +95,12 @@ LANGFUSE_BASE_URL=https://cloud.langfuse.com
 LOG_LEVEL=info
 ```
 
-### Text-to-SQL via MCP, optional
+### Text-to-SQL via semantic stores
 
-```env
-NEXT_PUBLIC_NL2SQL_MCP_URL=https://your-nl2sql-mcp.example.com/mcp
-```
-
-When set, points the in-chat Text-to-SQL flow at a hosted DBTools MCP server that exposes `generate_sql`. When unset, the Text-to-SQL toggle stays hidden.
+Enable **Text-to-SQL** in Settings → Tools → Native and select one or more
+semantic stores. The selected store IDs are sent with the response request; the
+REST service uses the store's Database Tools query connection to generate and
+execute read-only SQL.
 
 ### OCI Generative AI Hosted Deployments, optional
 
@@ -125,7 +146,7 @@ Toggle per-tool from Settings → Tools → Native:
 - **Web Search** *(coming soon)*, real-time web lookups
 - **File Search (RAG)**: vector retrieval over Knowledge Bases
 - **Code Interpreter**: Python sandbox with 420+ libraries
-- **Text-to-SQL**: natural language to SQL against your semantic stores, fronted by a hosted DBTools MCP server (set `NEXT_PUBLIC_NL2SQL_MCP_URL` in [Configuration](#text-to-sql-via-mcp-optional))
+- **Text-to-SQL**: natural language to SQL against the semantic stores selected in Settings
 
 ![Tools settings](images/03-settings-tools.png)
 

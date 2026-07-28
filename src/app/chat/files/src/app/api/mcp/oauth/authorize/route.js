@@ -74,24 +74,10 @@ export async function GET(request) {
         clientId = registration.client_id;
         clientSecret = registration.client_secret;
       } else {
-        // 2b. No dynamic registration (OCI IAM Identity Domains don't expose it).
-        // Use a pre-registered confidential client supplied via env. Wired for the
-        // NL2SQL MCP endpoint; the secret stays server-side (never hits the browser).
-        const nl2sqlUrl = process.env.NEXT_PUBLIC_NL2SQL_MCP_URL || process.env.NL2SQL_MCP_URL || '';
-        const envClientId = process.env.NL2SQL_OAUTH_CLIENT_ID;
-        const envClientSecret = process.env.NL2SQL_OAUTH_CLIENT_SECRET || '';
-        if (envClientId && nl2sqlUrl && endpoint === nl2sqlUrl) {
-          clientId = envClientId;
-          clientSecret = envClientSecret;
-          // IDCS only returns a refresh_token when offline_access is requested.
-          if (!scopeList.includes('offline_access')) scopeList = [...scopeList, 'offline_access'];
-          log.info('OAuth (pre-registered confidential client) authorize', { endpoint });
-        } else {
-          return NextResponse.json({
-            error: "This authorization server has no dynamic client registration. Set NL2SQL_OAUTH_CLIENT_ID / NL2SQL_OAUTH_CLIENT_SECRET (a pre-registered confidential app) to enable it.",
-            code: 'no_dynamic_registration',
-          }, { status: 502 });
-        }
+        return NextResponse.json({
+          error: 'This authorization server has no dynamic client registration.',
+          code: 'no_dynamic_registration',
+        }, { status: 502 });
       }
     }
 

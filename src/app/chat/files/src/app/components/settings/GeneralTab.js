@@ -455,7 +455,7 @@ export default function GeneralTab() {
                 sx={{ transform: "scale(0.8)" }}
               />
               <Chip
-                label="BLACK BELTS LAB"
+                label="AI ENGINEERS LAB"
                 size="small"
                 variant="outlined"
                 sx={{

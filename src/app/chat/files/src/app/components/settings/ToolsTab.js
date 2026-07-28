@@ -34,13 +34,6 @@ import ToolForm from "./ToolForm";
 import { darkCssVars, darkModeOverrides, DARK_SURFACE } from "../../config/darkMode";
 import { INTERNAL_TOOL_TABS, INTERNAL_ADDONS } from "../../config/tools-internal";
 
-// NL2SQL is presented as a native tool ("Text to SQL") but is delivered under
-// the hood as a remote MCP tool (server_label "Nl2Sql") per the OCI NL2SQL User
-// Guide §1.5. The hosted DBTools/NL2SQL MCP endpoint is supplied by the service
-// team and configured via this env var. When empty, the toggle still works in
-// the UI but no tool is sent to OCI (see genaiAgentsService).
-const NL2SQL_MCP_URL = process.env.NEXT_PUBLIC_NL2SQL_MCP_URL || '';
-
 const NATIVE_TOOLS = [
   {
     id: "native_web_search",
@@ -131,9 +124,6 @@ export default function ToolsTab() {
   const [semanticStores, setSemanticStores] = useState([]);
   const [loadingSemanticStores, setLoadingSemanticStores] = useState(false);
   const [selectedSemanticStoreIds, setSelectedSemanticStoreIds] = useState([]);
-  // OAuth 2.1 status for the NL2SQL MCP endpoint: 'authorized' | 'needs_auth' | null
-  const [nl2sqlAuth, setNl2sqlAuth] = useState(null);
-
   // Edit server — only need to know which one is being edited; values live in <ToolForm>
   const [editingServerId, setEditingServerId] = useState(null);
 
@@ -862,31 +852,6 @@ export default function ToolsTab() {
     if (isHydrated) checkOauth21Tokens();
   }, [servers, isHydrated]);
 
-  // Text-to-SQL = the DBTools MCP server (§1.5). It needs an OAuth 2.1 user
-  // token; probe whether one is mintable so the UI can show authorized/needs_auth.
-  useEffect(() => {
-    if (!isHydrated || !NL2SQL_MCP_URL || !nativeToolsEnabled.native_text_to_sql) {
-      setNl2sqlAuth(null);
-      return;
-    }
-    let cancelled = false;
-    (async () => {
-      try {
-        const res = await fetch(`/api/mcp/oauth/token?endpoint=${encodeURIComponent(NL2SQL_MCP_URL)}&probe=true`);
-        const data = await res.json().catch(() => ({}));
-        if (!cancelled) setNl2sqlAuth(data.hasToken ? 'authorized' : 'needs_auth');
-      } catch {
-        if (!cancelled) setNl2sqlAuth('needs_auth');
-      }
-    })();
-    return () => { cancelled = true; };
-  }, [isHydrated, nativeToolsEnabled.native_text_to_sql]);
-
-  const authorizeNl2sql = () => {
-    const returnTo = typeof window !== 'undefined' ? window.location.pathname : '/settings/tools';
-    window.location.href = MCPService.buildAuthorizeUrl({ endpoint: NL2SQL_MCP_URL, authType: 'oauth2.1' }, returnTo);
-  };
-
   // Show feedback when returning from an OAuth callback (success or error)
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -1332,34 +1297,6 @@ export default function ToolsTab() {
                               <RefreshCw size={14} className={loadingSemanticStores ? "animate-spin" : ""} />
                             </IconButton>
                           </Box>
-
-                          {!NL2SQL_MCP_URL ? (
-                            <Box sx={{ mb: 1, px: 1, py: 0.75, borderRadius: 1.5, backgroundColor: "rgba(245, 158, 11, 0.08)" }}>
-                              <Typography sx={{ fontSize: "0.72rem", color: "var(--dm-muted, rgba(0,0,0,0.55))", lineHeight: 1.4 }}>
-                                ⚠️ NL2SQL endpoint not configured. Set <code>NEXT_PUBLIC_NL2SQL_MCP_URL</code> to the hosted DBTools MCP endpoint.
-                              </Typography>
-                            </Box>
-                          ) : nl2sqlAuth === 'needs_auth' ? (
-                            <Box sx={{ mb: 1, px: 1, py: 1, borderRadius: 1.5, backgroundColor: "rgba(245, 158, 11, 0.08)", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 1 }}>
-                              <Typography sx={{ fontSize: "0.72rem", color: "var(--dm-muted, rgba(0,0,0,0.6))", lineHeight: 1.4 }}>
-                                🔒 Authorization required to query the database.
-                              </Typography>
-                              <Button
-                                size="small"
-                                variant="contained"
-                                startIcon={<KeyRound size={14} />}
-                                onClick={authorizeNl2sql}
-                                sx={{ textTransform: "none", fontSize: "0.72rem", py: 0.4, px: 1.2, backgroundColor: "#F59E0B", "&:hover": { backgroundColor: "#D97706" }, flexShrink: 0 }}
-                              >
-                                Authorize
-                              </Button>
-                            </Box>
-                          ) : nl2sqlAuth === 'authorized' ? (
-                            <Box sx={{ mb: 1, px: 1, py: 0.5, display: "flex", alignItems: "center", gap: 0.5 }}>
-                              <Check size={13} color="#059669" />
-                              <Typography sx={{ fontSize: "0.72rem", color: "#059669" }}>Authorized</Typography>
-                            </Box>
-                          ) : null}
 
                           {loadingSemanticStores ? (
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1, py: 1.5 }}>

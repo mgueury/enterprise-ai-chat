@@ -72,8 +72,8 @@ export async function GET(request) {
     });
     return response;
   } catch (err) {
-    // Surface the IdP's actual error — a silent hasToken:false here made the
-    // Nl2Sql (Text-to-SQL) tool quietly drop out of requests with no trace of why.
+    // Surface the IdP's actual error rather than silently treating an expired
+    // refresh token as an absent authorization.
     log.error('Refresh failed', { endpoint: endpoint.slice(0, 60), error: (err?.message || '').slice(0, 300) });
     return NextResponse.json({ hasToken: false });
   }

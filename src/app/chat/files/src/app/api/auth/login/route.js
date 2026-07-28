@@ -20,7 +20,7 @@ export async function GET(request) {
     response_type: 'code',
     client_id: idcs.clientId,
     redirect_uri: redirectUri,
-    scope: 'openid profile email',
+    scope: 'openid profile email groups',
     state: crypto.randomUUID(),
   });
 

@@ -1,0 +1,469 @@
+
+> oci-enterprise-ai-chat@0.10.0 dev
+> next dev --turbopack
+
+▲ Next.js 16.1.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.32:3000
+
+✓ Starting...
+✓ Ready in 653ms
+ GET /settings/tools 200 in 753ms (compile: 361ms, proxy.ts: 864µs, render: 391ms)
+ GET / 200 in 786ms (compile: 396ms, proxy.ts: 28ms, render: 362ms)
+ GET /c/d2f57885-1583-477e-b117-7d2684c67c35 200 in 1045ms (compile: 999ms, proxy.ts: 2ms, render: 43ms)
+ GET /api/auth/session 200 in 38ms (compile: 30ms, proxy.ts: 1391µs, render: 6ms)
+ GET /api/auth/session 200 in 4ms (compile: 1275µs, proxy.ts: 1456µs, render: 1739µs)
+ GET /api/auth/session 200 in 4ms (compile: 976µs, proxy.ts: 1069µs, render: 1514µs)
+{"ts":"2026-07-27T14:45:35.693Z","level":"info","component":"conversations-api","msg":"Get conversation items","requestId":"58daea73-5410-4f7c-ad23-dd0abe653d9c","meta":{"basePath":"/openai/v1","conversationId":"conv_a34e92422ba9a655a327ce7ab68202a5fae921dcd29f2a286c"}}
+ GET /api/auth/session 200 in 8ms (compile: 3ms, proxy.ts: 2ms, render: 2ms)
+ GET /api/auth/session 200 in 4ms (compile: 1049µs, proxy.ts: 1116µs, render: 1738µs)
+ GET /api/auth/session 200 in 4ms (compile: 1796µs, proxy.ts: 1018µs, render: 1574µs)
+ GET /api/auth/session 200 in 4ms (compile: 944µs, proxy.ts: 1108µs, render: 1701µs)
+ GET /api/conversations?id=conv_a34e92422ba9a655a327ce7ab68202a5fae921dcd29f2a286c&getItems=true 200 in 2.6s (compile: 2.4s, proxy.ts: 1382µs, render: 243ms)
+ GET /api/vector-stores 200 in 1961ms (compile: 1660ms, proxy.ts: 4ms, render: 297ms)
+ GET /api/vector-stores 200 in 283ms (compile: 8ms, proxy.ts: 1849µs, render: 273ms)
+ GET /api/vector-stores 200 in 86ms (compile: 5ms, proxy.ts: 1301µs, render: 80ms)
+{"ts":"2026-07-27T14:49:26.392Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"cf93e4dc-38d6-4f6a-9fdc-5c2c8576cc9b","meta":{"backend":"rest","model":"openai.gpt-oss-120b","hasInstructions":true,"instructionsLen":26479,"hasConversation":true,"toolCount":0,"toolTypes":[],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T14:49:26.466Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"cf93e4dc-38d6-4f6a-9fdc-5c2c8576cc9b"}
+{"ts":"2026-07-27T14:49:26.468Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"cf93e4dc-38d6-4f6a-9fdc-5c2c8576cc9b","meta":{"itemType":"message","itemId":"msg_resp_09bef48fe1da4195a470c43c47d873ae","elapsed":2}}
+{"ts":"2026-07-27T14:49:27.743Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"cf93e4dc-38d6-4f6a-9fdc-5c2c8576cc9b","meta":{"itemType":"message","itemId":"msg_resp_09bef48fe1da4195a470c43c47d873ae","status":"completed","elapsed":1277}}
+{"ts":"2026-07-27T14:49:27.744Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"cf93e4dc-38d6-4f6a-9fdc-5c2c8576cc9b","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T14:49:27.744Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"cf93e4dc-38d6-4f6a-9fdc-5c2c8576cc9b","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T14:49:27.744Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"cf93e4dc-38d6-4f6a-9fdc-5c2c8576cc9b","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":1278,"opcRequestId":null}}
+{"ts":"2026-07-27T14:49:27.746Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"cf93e4dc-38d6-4f6a-9fdc-5c2c8576cc9b","meta":{"elapsed":1279,"toolCalls":0,"textLength":307,"responseCompleted":true,"eventCount":6,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 1469ms (compile: 98ms, proxy.ts: 8ms, render: 1362ms)
+ POST /api/generate-title 200 in 914ms (compile: 48ms, proxy.ts: 1874µs, render: 864ms)
+ GET /settings/tools 200 in 80ms (compile: 4ms, proxy.ts: 3ms, render: 72ms)
+ GET /backgrounds/white-red-background.png 404 in 121ms (compile: 82ms, proxy.ts: 5ms, render: 34ms)
+ GET /api/auth/session 200 in 11ms (compile: 7ms, proxy.ts: 1861µs, render: 2ms)
+ GET /api/vector-stores 200 in 310ms (compile: 4ms, proxy.ts: 4ms, render: 301ms)
+ GET / 200 in 15ms (compile: 4ms, proxy.ts: 1700µs, render: 9ms)
+ GET /api/auth/session 200 in 10ms (compile: 4ms, proxy.ts: 1989µs, render: 5ms)
+ GET /api/auth/session 200 in 6ms (compile: 1804µs, proxy.ts: 1443µs, render: 3ms)
+ GET /api/auth/session 200 in 4ms (compile: 1507µs, proxy.ts: 1238µs, render: 1599µs)
+ GET /api/auth/session 200 in 7ms (compile: 3ms, proxy.ts: 1735µs, render: 2ms)
+ GET /api/auth/session 200 in 8ms (compile: 1677µs, proxy.ts: 4ms, render: 1806µs)
+ GET /api/auth/session 200 in 6ms (compile: 2ms, proxy.ts: 1523µs, render: 1748µs)
+ GET /api/vector-stores 200 in 97ms (compile: 4ms, proxy.ts: 1291µs, render: 91ms)
+ GET /api/vector-stores 200 in 83ms (compile: 8ms, proxy.ts: 1259µs, render: 73ms)
+ GET /settings/tools 200 in 62ms (compile: 8ms, proxy.ts: 3ms, render: 52ms)
+ GET /backgrounds/white-red-background.png 404 in 44ms (compile: 19ms, proxy.ts: 1415µs, render: 23ms)
+ GET /api/auth/session 200 in 5ms (compile: 1259µs, proxy.ts: 1621µs, render: 2ms)
+ GET /api/vector-stores 200 in 303ms (compile: 11ms, proxy.ts: 4ms, render: 288ms)
+ GET / 200 in 17ms (compile: 4ms, proxy.ts: 2ms, render: 10ms)
+ GET /api/auth/session 200 in 11ms (compile: 6ms, proxy.ts: 1514µs, render: 3ms)
+ GET /api/auth/session 200 in 7ms (compile: 1907µs, proxy.ts: 3ms, render: 2ms)
+ GET /api/auth/session 200 in 7ms (compile: 2ms, proxy.ts: 3ms, render: 1998µs)
+ GET /api/auth/session 200 in 6ms (compile: 1730µs, proxy.ts: 1768µs, render: 2ms)
+ GET /api/auth/session 200 in 11ms (compile: 2ms, proxy.ts: 2ms, render: 7ms)
+ GET /api/auth/session 200 in 10ms (compile: 5ms, proxy.ts: 3ms, render: 1550µs)
+ GET /api/vector-stores 200 in 139ms (compile: 9ms, proxy.ts: 1455µs, render: 129ms)
+ GET /api/vector-stores 200 in 134ms (compile: 6ms, proxy.ts: 1430µs, render: 126ms)
+{"ts":"2026-07-27T14:49:57.389Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"2cfe9872-65f3-44e3-a09c-bd3514a34d51","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T14:49:57.693Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"2cfe9872-65f3-44e3-a09c-bd3514a34d51","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_672209fd609bcded00560e06627e4e699e77c580e64425c367\",\"object\":\"conversation\",\"created_at\":1785163797,\"metadata\":{\"topic\":\"What is ODA \",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 343ms (compile: 24ms, proxy.ts: 9ms, render: 310ms)
+{"ts":"2026-07-27T14:49:57.717Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"db071b92-6aad-4866-87dc-b13543b18a43","meta":{"backend":"rest","model":"openai.gpt-oss-120b","hasInstructions":true,"instructionsLen":26479,"hasConversation":true,"toolCount":0,"toolTypes":[],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T14:49:57.732Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"db071b92-6aad-4866-87dc-b13543b18a43"}
+{"ts":"2026-07-27T14:49:57.733Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"db071b92-6aad-4866-87dc-b13543b18a43","meta":{"itemType":"message","itemId":"msg_resp_de08375cc06148c996ba06c2dd62b1d1","elapsed":1}}
+{"ts":"2026-07-27T14:49:58.705Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"db071b92-6aad-4866-87dc-b13543b18a43","meta":{"itemType":"message","itemId":"msg_resp_de08375cc06148c996ba06c2dd62b1d1","status":"completed","elapsed":973}}
+{"ts":"2026-07-27T14:49:58.706Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"db071b92-6aad-4866-87dc-b13543b18a43","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T14:49:58.706Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"db071b92-6aad-4866-87dc-b13543b18a43","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T14:49:58.707Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"db071b92-6aad-4866-87dc-b13543b18a43","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":975,"opcRequestId":null}}
+{"ts":"2026-07-27T14:49:58.708Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"db071b92-6aad-4866-87dc-b13543b18a43","meta":{"elapsed":975,"toolCalls":0,"textLength":307,"responseCompleted":true,"eventCount":6,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 1010ms (compile: 12ms, proxy.ts: 2ms, render: 996ms)
+ POST /api/generate-title 200 in 473ms (compile: 6ms, proxy.ts: 1616µs, render: 466ms)
+{"ts":"2026-07-27T14:50:09.398Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"backend":"rest","model":"google.gemini-2.5-pro","hasInstructions":true,"instructionsLen":26844,"hasConversation":true,"toolCount":1,"toolTypes":["file_search"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T14:50:09.401Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad"}
+{"ts":"2026-07-27T14:50:09.402Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"itemType":"message","itemId":"msg_resp_27b907903ee64206a20f3964d68e70d5","elapsed":1}}
+{"ts":"2026-07-27T14:50:36.481Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"itemType":"file_search_call","itemId":"fs_resp_27b907903ee64206a20f3964d68e70d5_0","elapsed":27080}}
+{"ts":"2026-07-27T14:50:36.483Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"itemType":"file_search_call","itemId":"fs_resp_27b907903ee64206a20f3964d68e70d5_0","status":"completed","elapsed":27082}}
+{"ts":"2026-07-27T14:50:36.484Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"itemType":"message","itemId":"msg_resp_27b907903ee64206a20f3964d68e70d5","status":"completed","elapsed":27083}}
+{"ts":"2026-07-27T14:50:36.485Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T14:50:36.485Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"index":1,"type":"file_search_call","status":"completed"}}
+{"ts":"2026-07-27T14:50:36.485Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T14:50:36.485Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"status":"completed","error":null,"outputItems":2,"elapsed":27084,"opcRequestId":null}}
+{"ts":"2026-07-27T14:50:36.486Z","level":"info","component":"responses-api","msg":"Emitting file_search source citations","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"count":10}}
+{"ts":"2026-07-27T14:50:36.487Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"abe81d2f-b0c3-4990-b992-fc25c69b0dad","meta":{"elapsed":27085,"toolCalls":0,"textLength":425,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 27.1s (compile: 6ms, proxy.ts: 2ms, render: 27.1s)
+ POST /api/generate-title 200 in 669ms (compile: 13ms, proxy.ts: 11ms, render: 645ms)
+○ Compiling /api/files/[id]/content ...
+ GET /api/files/file-fra-f6cd3c8e-c197-4859-9272-69d92414286b/content?vsId=vs_fra_6rlzawvximl73ac7meipidm9so53r36zmoim3501nkzuan2j 200 in 9.8s (compile: 9.0s, proxy.ts: 16ms, render: 791ms)
+ GET /api/vector-stores 200 in 1252ms (compile: 10ms, proxy.ts: 16ms, render: 1226ms)
+ GET /api/vector-stores 200 in 171ms (compile: 8ms, proxy.ts: 1165µs, render: 162ms)
+ GET /api/vector-stores 200 in 173ms (compile: 4ms, proxy.ts: 4ms, render: 165ms)
+ GET /api/vector-stores 200 in 130ms (compile: 5ms, proxy.ts: 1337µs, render: 124ms)
+ GET /c/59c7cfc4-685a-4679-948a-d1b295c087f4 200 in 114ms (compile: 18ms, proxy.ts: 8ms, render: 88ms)
+ GET /api/auth/session 200 in 5ms (compile: 1567µs, proxy.ts: 1144µs, render: 2ms)
+ GET /api/auth/session 200 in 3ms (compile: 915µs, proxy.ts: 980µs, render: 1355µs)
+ GET /api/auth/session 200 in 3ms (compile: 800µs, proxy.ts: 846µs, render: 1344µs)
+{"ts":"2026-07-27T14:51:13.809Z","level":"info","component":"conversations-api","msg":"Get conversation items","requestId":"fe28fa24-f7ab-4548-9b60-8155e43bcc9c","meta":{"basePath":"/openai/v1","conversationId":"conv_672209fd609bcded00560e06627e4e699e77c580e64425c367"}}
+ GET /api/conversations?id=conv_672209fd609bcded00560e06627e4e699e77c580e64425c367&getItems=true 200 in 362ms (compile: 6ms, proxy.ts: 1240µs, render: 354ms)
+ GET /api/vector-stores 200 in 267ms (compile: 5ms, proxy.ts: 1317µs, render: 261ms)
+ GET /api/vector-stores 200 in 126ms (compile: 4ms, proxy.ts: 1045µs, render: 121ms)
+{"ts":"2026-07-27T14:51:24.862Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":26844,"hasConversation":true,"toolCount":1,"toolTypes":["file_search"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T14:51:24.945Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"2abe6590-0319-453f-8884-66513e5c7024"}
+{"ts":"2026-07-27T14:51:24.946Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"itemType":"message","itemId":"msg_resp_637bee5cb373443d83ab6a76cb41fbff","elapsed":1}}
+{"ts":"2026-07-27T14:51:33.909Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"itemType":"file_search_call","itemId":"fs_resp_637bee5cb373443d83ab6a76cb41fbff_0","elapsed":8964}}
+{"ts":"2026-07-27T14:51:33.910Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"itemType":"file_search_call","itemId":"fs_resp_637bee5cb373443d83ab6a76cb41fbff_0","status":"completed","elapsed":8965}}
+{"ts":"2026-07-27T14:51:33.911Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"itemType":"message","itemId":"msg_resp_637bee5cb373443d83ab6a76cb41fbff","status":"completed","elapsed":8966}}
+{"ts":"2026-07-27T14:51:33.912Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T14:51:33.912Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"index":1,"type":"file_search_call","status":"completed"}}
+{"ts":"2026-07-27T14:51:33.912Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T14:51:33.912Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"status":"completed","error":null,"outputItems":2,"elapsed":8967,"opcRequestId":null}}
+{"ts":"2026-07-27T14:51:33.913Z","level":"info","component":"responses-api","msg":"Emitting file_search source citations","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"count":10}}
+{"ts":"2026-07-27T14:51:33.916Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"2abe6590-0319-453f-8884-66513e5c7024","meta":{"elapsed":8970,"toolCalls":0,"textLength":735,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 9.1s (compile: 11ms, proxy.ts: 2ms, render: 9.1s)
+ POST /api/generate-title 200 in 1146ms (compile: 9ms, proxy.ts: 3ms, render: 1135ms)
+{"ts":"2026-07-27T14:52:04.443Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"f68bbbcd-e56c-4edd-b9ec-ce5a9bbada17","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T14:52:04.700Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"f68bbbcd-e56c-4edd-b9ec-ce5a9bbada17","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_5b2b1bb32c5ef6cd8e7692bc6ff6de97f0e9d4b4da9831afb6\",\"object\":\"conversation\",\"created_at\":1785163924,\"metadata\":{\"topic\":\"What is document understanding \",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 299ms (compile: 21ms, proxy.ts: 13ms, render: 265ms)
+{"ts":"2026-07-27T14:52:04.719Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":26844,"hasConversation":true,"toolCount":1,"toolTypes":["file_search"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T14:52:04.737Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff"}
+{"ts":"2026-07-27T14:52:04.738Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"itemType":"message","itemId":"msg_resp_be4f9dd4afd9463ebc491e5dde370454","elapsed":1}}
+{"ts":"2026-07-27T14:52:28.526Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"itemType":"file_search_call","itemId":"fs_resp_be4f9dd4afd9463ebc491e5dde370454_0","elapsed":23789}}
+{"ts":"2026-07-27T14:52:28.534Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"itemType":"file_search_call","itemId":"fs_resp_be4f9dd4afd9463ebc491e5dde370454_0","status":"completed","elapsed":23797}}
+{"ts":"2026-07-27T14:52:28.541Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"itemType":"message","itemId":"msg_resp_be4f9dd4afd9463ebc491e5dde370454","status":"completed","elapsed":23804}}
+{"ts":"2026-07-27T14:52:28.542Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T14:52:28.542Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"index":1,"type":"file_search_call","status":"completed"}}
+{"ts":"2026-07-27T14:52:28.542Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T14:52:28.542Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"status":"completed","error":null,"outputItems":2,"elapsed":23805,"opcRequestId":null}}
+{"ts":"2026-07-27T14:52:28.543Z","level":"info","component":"responses-api","msg":"Emitting file_search source citations","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"count":10}}
+{"ts":"2026-07-27T14:52:28.545Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"7a26e1b1-4eb9-4128-b0a1-471f8af073ff","meta":{"elapsed":23808,"toolCalls":0,"textLength":1104,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 23.8s (compile: 7ms, proxy.ts: 1580µs, render: 23.8s)
+ POST /api/generate-title 200 in 604ms (compile: 15ms, proxy.ts: 4ms, render: 584ms)
+ GET / 200 in 74ms (compile: 8ms, proxy.ts: 10ms, render: 57ms)
+ GET /api/auth/session 200 in 10ms (compile: 1915µs, proxy.ts: 1273µs, render: 6ms)
+ GET /api/auth/session 200 in 4ms (compile: 1135µs, proxy.ts: 1459µs, render: 1435µs)
+ GET /api/auth/session 200 in 5ms (compile: 1391µs, proxy.ts: 1349µs, render: 1811µs)
+ GET /settings/tools 200 in 84ms (compile: 11ms, proxy.ts: 12ms, render: 61ms)
+ GET /backgrounds/white-red-background.png 404 in 54ms (compile: 29ms, proxy.ts: 3ms, render: 22ms)
+ GET /api/auth/session 200 in 6ms (compile: 1808µs, proxy.ts: 1711µs, render: 3ms)
+ GET /api/vector-stores 200 in 633ms (compile: 6ms, proxy.ts: 2ms, render: 624ms)
+{"ts":"2026-07-27T14:53:55.771Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"initialize","params":"{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"OCI-Chat\",\"version\":\"1.0.0\"}}"}}
+ POST /api/mcp 200 in 105ms (compile: 29ms, proxy.ts: 8ms, render: 68ms)
+{"ts":"2026-07-27T14:53:55.844Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"tools/list","params":"{}"}}
+ POST /api/mcp 200 in 23ms (compile: 5ms, proxy.ts: 1969µs, render: 16ms)
+ GET / 200 in 42ms (compile: 9ms, proxy.ts: 13ms, render: 21ms)
+ GET /api/auth/session 200 in 8ms (compile: 3ms, proxy.ts: 1545µs, render: 3ms)
+ GET /api/auth/session 200 in 5ms (compile: 1242µs, proxy.ts: 1399µs, render: 2ms)
+ GET /api/auth/session 200 in 5ms (compile: 1541µs, proxy.ts: 1090µs, render: 3ms)
+ GET /api/auth/session 200 in 7ms (compile: 3ms, proxy.ts: 1910µs, render: 1744µs)
+ GET /api/auth/session 200 in 6ms (compile: 1649µs, proxy.ts: 1308µs, render: 3ms)
+ GET /api/auth/session 200 in 4ms (compile: 1204µs, proxy.ts: 1241µs, render: 1612µs)
+ GET /api/vector-stores 200 in 426ms (compile: 68ms, proxy.ts: 11ms, render: 347ms)
+ GET /api/vector-stores 200 in 248ms (compile: 13ms, proxy.ts: 1494µs, render: 234ms)
+✓ Compiled in 183ms
+ GET /api/auth/session 200 in 28ms (compile: 4ms, proxy.ts: 13ms, render: 11ms)
+{"ts":"2026-07-27T18:25:37.626Z","level":"info","component":"conversations-api","msg":"Get conversation items","requestId":"960e061a-6247-4b59-8535-64f9a8cf5706","meta":{"basePath":"/openai/v1","conversationId":"conv_672209fd609bcded00560e06627e4e699e77c580e64425c367"}}
+ GET /api/auth/session 200 in 5ms (compile: 1339µs, proxy.ts: 1158µs, render: 3ms)
+ GET /api/conversations?id=conv_672209fd609bcded00560e06627e4e699e77c580e64425c367&getItems=true 200 in 386ms (compile: 14ms, proxy.ts: 1670µs, render: 371ms)
+{"ts":"2026-07-27T18:26:41.274Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"2abe68c2-f725-40bb-9142-822c8d4d7824","meta":{"backend":"rest","model":"google.gemini-2.5-pro","hasInstructions":false,"instructionsLen":0,"hasConversation":false,"toolCount":1,"toolTypes":["semantic_store"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:26:41.355Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"2abe68c2-f725-40bb-9142-822c8d4d7824"}
+{"ts":"2026-07-27T18:26:41.356Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"2abe68c2-f725-40bb-9142-822c8d4d7824","meta":{"itemType":"message","itemId":"msg_resp_94a6fdf7eddc460fa18bed4cf8f08473","elapsed":1}}
+{"ts":"2026-07-27T18:26:44.066Z","level":"info","component":"responses-api","msg":"SSE control line","requestId":"2abe68c2-f725-40bb-9142-822c8d4d7824","meta":{"elapsed":2711,"line":"event: error"}}
+{"ts":"2026-07-27T18:26:44.068Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"2abe68c2-f725-40bb-9142-822c8d4d7824","meta":{"elapsed":2712,"toolCalls":0,"textLength":0,"responseCompleted":true,"eventCount":2,"lastEventType":"response.output_item.added","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 4.3s (compile: 1498ms, proxy.ts: 26ms, render: 2.8s)
+ GET /api/vector-stores 200 in 903ms (compile: 24ms, proxy.ts: 8ms, render: 872ms)
+ GET /api/vector-stores 200 in 99ms (compile: 17ms, proxy.ts: 2ms, render: 80ms)
+ GET /settings/tools 200 in 78ms (compile: 9ms, proxy.ts: 2ms, render: 66ms)
+ GET /backgrounds/white-red-background.png 404 in 36ms (compile: 14ms, proxy.ts: 6ms, render: 16ms)
+ GET /api/auth/session 200 in 5ms (compile: 1818µs, proxy.ts: 1484µs, render: 2ms)
+ GET /api/vector-stores 200 in 137ms (compile: 8ms, proxy.ts: 1181µs, render: 128ms)
+ GET /api/semantic-stores 200 in 216ms (compile: 62ms, proxy.ts: 1228µs, render: 153ms)
+ GET / 200 in 23ms (compile: 8ms, proxy.ts: 3ms, render: 12ms)
+ GET /api/auth/session 200 in 13ms (compile: 5ms, proxy.ts: 2ms, render: 6ms)
+ GET /api/auth/session 200 in 7ms (compile: 3ms, proxy.ts: 2ms, render: 3ms)
+ GET /api/auth/session 200 in 6ms (compile: 3ms, proxy.ts: 1963µs, render: 1794µs)
+ GET /api/auth/session 200 in 6ms (compile: 2ms, proxy.ts: 1759µs, render: 1677µs)
+ GET /api/auth/session 200 in 5ms (compile: 1720µs, proxy.ts: 1501µs, render: 1407µs)
+ GET /api/auth/session 200 in 5ms (compile: 1799µs, proxy.ts: 1374µs, render: 1388µs)
+ GET /api/vector-stores 200 in 341ms (compile: 7ms, proxy.ts: 1364µs, render: 333ms)
+ GET /api/vector-stores 200 in 110ms (compile: 4ms, proxy.ts: 1063µs, render: 105ms)
+{"ts":"2026-07-27T18:41:24.994Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"1855f236-158f-4193-97e4-ee7272afe194","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T18:41:25.428Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"1855f236-158f-4193-97e4-ee7272afe194","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_59c88e494f95e54ec40584eea822029313cfb0469658226abb\",\"object\":\"conversation\",\"created_at\":1785177685,\"metadata\":{\"topic\":\"List the tables in the\",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 470ms (compile: 17ms, proxy.ts: 10ms, render: 443ms)
+{"ts":"2026-07-27T18:41:25.493Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":27150,"hasConversation":true,"toolCount":1,"toolTypes":["semantic_store"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:41:25.599Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"20491989-96de-4b3a-91ce-aa2649421203"}
+{"ts":"2026-07-27T18:41:25.601Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"itemType":"message","itemId":"msg_resp_268681f2ed064588ba3dead6bd21253d","elapsed":2}}
+{"ts":"2026-07-27T18:41:36.579Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"itemType":"mcp_call","itemId":"mcp_resp_268681f2ed064588ba3dead6bd21253d_0","elapsed":10980,"server":"McpServer"}}
+{"ts":"2026-07-27T18:41:36.581Z","level":"info","component":"responses-api","msg":"MCP tool calling","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"tool":"search_database","server":"McpServer","args":"{}","elapsed":10980}}
+{"ts":"2026-07-27T18:41:36.584Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"itemType":"mcp_call","itemId":"mcp_resp_268681f2ed064588ba3dead6bd21253d_0","status":"completed","elapsed":10985,"tool":"search_database","server":"McpServer"}}
+{"ts":"2026-07-27T18:41:36.584Z","level":"info","component":"responses-api","msg":"MCP tool succeeded","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"tool":"search_database","server":"McpServer","outputSize":490,"elapsed":10985}}
+{"ts":"2026-07-27T18:41:36.587Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"itemType":"message","itemId":"msg_resp_268681f2ed064588ba3dead6bd21253d","status":"completed","elapsed":10988}}
+{"ts":"2026-07-27T18:41:36.588Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:41:36.588Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:41:36.588Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":10989,"opcRequestId":null}}
+{"ts":"2026-07-27T18:41:36.590Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"20491989-96de-4b3a-91ce-aa2649421203","meta":{"elapsed":10991,"toolCalls":1,"textLength":59,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 11.1s (compile: 34ms, proxy.ts: 1980µs, render: 11.1s)
+ POST /api/generate-title 200 in 703ms (compile: 12ms, proxy.ts: 10ms, render: 680ms)
+{"ts":"2026-07-27T18:41:48.266Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":27150,"hasConversation":true,"toolCount":1,"toolTypes":["semantic_store"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:41:48.284Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6"}
+{"ts":"2026-07-27T18:41:48.285Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"itemType":"message","itemId":"msg_resp_8fff0f6f5b2243af86b9f52efcfd52e3","elapsed":1}}
+{"ts":"2026-07-27T18:42:03.323Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"itemType":"mcp_call","itemId":"mcp_resp_8fff0f6f5b2243af86b9f52efcfd52e3_0","elapsed":15039,"server":"McpServer"}}
+{"ts":"2026-07-27T18:42:03.326Z","level":"info","component":"responses-api","msg":"MCP tool calling","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"tool":"search_database","server":"McpServer","args":"{}","elapsed":15039}}
+{"ts":"2026-07-27T18:42:03.330Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"itemType":"mcp_call","itemId":"mcp_resp_8fff0f6f5b2243af86b9f52efcfd52e3_0","status":"completed","elapsed":15046,"tool":"search_database","server":"McpServer"}}
+{"ts":"2026-07-27T18:42:03.331Z","level":"info","component":"responses-api","msg":"MCP tool succeeded","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"tool":"search_database","server":"McpServer","outputSize":490,"elapsed":15046}}
+{"ts":"2026-07-27T18:42:03.332Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"itemType":"mcp_call","itemId":"mcp_resp_8fff0f6f5b2243af86b9f52efcfd52e3_1","elapsed":15048,"server":"McpServer"}}
+{"ts":"2026-07-27T18:42:03.332Z","level":"info","component":"responses-api","msg":"MCP tool calling","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"tool":"search_database","server":"McpServer","args":"{}","elapsed":15048}}
+{"ts":"2026-07-27T18:42:03.333Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"itemType":"mcp_call","itemId":"mcp_resp_8fff0f6f5b2243af86b9f52efcfd52e3_1","status":"completed","elapsed":15049,"tool":"search_database","server":"McpServer"}}
+{"ts":"2026-07-27T18:42:03.333Z","level":"info","component":"responses-api","msg":"MCP tool succeeded","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"tool":"search_database","server":"McpServer","outputSize":4297,"elapsed":15049}}
+{"ts":"2026-07-27T18:42:03.334Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"itemType":"message","itemId":"msg_resp_8fff0f6f5b2243af86b9f52efcfd52e3","status":"completed","elapsed":15050}}
+{"ts":"2026-07-27T18:42:03.334Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:42:03.334Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:42:03.334Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":15050,"opcRequestId":null}}
+{"ts":"2026-07-27T18:42:03.337Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"0c3bd388-b381-4556-9134-372bc0bd86c6","meta":{"elapsed":15053,"toolCalls":2,"textLength":639,"responseCompleted":true,"eventCount":10,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 15.1s (compile: 24ms, proxy.ts: 15ms, render: 15.1s)
+ POST /api/generate-title 200 in 610ms (compile: 20ms, proxy.ts: 10ms, render: 580ms)
+ GET / 200 in 79ms (compile: 11ms, proxy.ts: 9ms, render: 59ms)
+ GET /api/auth/session 200 in 7ms (compile: 1501µs, proxy.ts: 1260µs, render: 4ms)
+ GET /api/auth/session 200 in 4ms (compile: 1248µs, proxy.ts: 1218µs, render: 1671µs)
+ GET /api/auth/session 200 in 4ms (compile: 1145µs, proxy.ts: 1163µs, render: 1563µs)
+ GET /settings/tools 200 in 81ms (compile: 10ms, proxy.ts: 13ms, render: 58ms)
+ GET /backgrounds/white-red-background.png 404 in 60ms (compile: 17ms, proxy.ts: 1539µs, render: 41ms)
+ GET /api/auth/session 200 in 5ms (compile: 1500µs, proxy.ts: 1143µs, render: 3ms)
+ GET /api/semantic-stores 200 in 455ms (compile: 17ms, proxy.ts: 5ms, render: 433ms)
+ GET /api/auth/session 200 in 36ms (compile: 7ms, proxy.ts: 16ms, render: 13ms)
+ GET /api/auth/session 200 in 25ms (compile: 4ms, proxy.ts: 15ms, render: 6ms)
+✓ Compiled in 1041ms
+ GET /api/semantic-stores 200 in 494ms (compile: 27ms, proxy.ts: 14ms, render: 453ms)
+ GET /api/semantic-stores 200 in 78ms (compile: 8ms, proxy.ts: 1550µs, render: 68ms)
+ GET /api/semantic-stores 200 in 212ms (compile: 4ms, proxy.ts: 1166µs, render: 207ms)
+ GET /api/semantic-stores 200 in 97ms (compile: 5ms, proxy.ts: 3ms, render: 90ms)
+ GET /api/semantic-stores 200 in 466ms (compile: 6ms, proxy.ts: 1304µs, render: 458ms)
+ GET /api/semantic-stores 200 in 110ms (compile: 4ms, proxy.ts: 1102µs, render: 106ms)
+ GET / 200 in 77ms (compile: 15ms, proxy.ts: 5ms, render: 56ms)
+ GET /api/auth/session 200 in 11ms (compile: 3ms, proxy.ts: 4ms, render: 4ms)
+ GET /api/auth/session 200 in 11ms (compile: 1655µs, proxy.ts: 7ms, render: 1870µs)
+ GET /api/auth/session 200 in 7ms (compile: 4ms, proxy.ts: 1305µs, render: 1598µs)
+✓ Compiled in 462ms
+ GET /api/auth/session 200 in 48ms (compile: 6ms, proxy.ts: 33ms, render: 9ms)
+ GET /api/auth/session 200 in 8ms (compile: 4ms, proxy.ts: 1444µs, render: 3ms)
+ GET / 200 in 488ms (compile: 87ms, proxy.ts: 5ms, render: 396ms)
+ GET / 200 in 32ms (compile: 1524µs, proxy.ts: 1181µs, render: 29ms)
+ GET /api/semantic-stores 200 in 284ms (compile: 29ms, proxy.ts: 19ms, render: 236ms)
+✓ Compiled in 39ms
+ GET /api/auth/session 200 in 8ms (compile: 2ms, proxy.ts: 2ms, render: 3ms)
+ GET /api/auth/session 200 in 6ms (compile: 1534µs, proxy.ts: 1496µs, render: 3ms)
+ GET / 200 in 124ms (compile: 96ms, proxy.ts: 10ms, render: 17ms)
+ GET /api/auth/session 200 in 9ms (compile: 3ms, proxy.ts: 1900µs, render: 4ms)
+ GET /api/auth/session 200 in 6ms (compile: 1539µs, proxy.ts: 1562µs, render: 3ms)
+ GET /api/auth/session 200 in 7ms (compile: 1965µs, proxy.ts: 1341µs, render: 4ms)
+ GET /api/auth/session 200 in 7ms (compile: 2ms, proxy.ts: 1448µs, render: 3ms)
+ GET /api/auth/session 200 in 7ms (compile: 2ms, proxy.ts: 2ms, render: 2ms)
+ GET /api/auth/session 200 in 6ms (compile: 1715µs, proxy.ts: 1837µs, render: 3ms)
+{"ts":"2026-07-27T18:54:42.394Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"859e9bb8-6ba2-4bc3-888d-ec8ec5cd85c4","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T18:54:42.760Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"859e9bb8-6ba2-4bc3-888d-ec8ec5cd85c4","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_3a1e77e7b5a7919632c3b14250236013b5adcbefdb88f4034c\",\"object\":\"conversation\",\"created_at\":1785178482,\"metadata\":{\"topic\":\"Who are you \",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 410ms (compile: 29ms, proxy.ts: 9ms, render: 372ms)
+{"ts":"2026-07-27T18:54:42.822Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"78ef5dd1-1864-420e-a4d0-f1701e4f22c6","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":2016,"hasConversation":true,"toolCount":0,"toolTypes":[],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:54:42.887Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"78ef5dd1-1864-420e-a4d0-f1701e4f22c6"}
+{"ts":"2026-07-27T18:54:42.889Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"78ef5dd1-1864-420e-a4d0-f1701e4f22c6","meta":{"itemType":"message","itemId":"msg_resp_8a462ce6021743ea8572c2fd01babdc0","elapsed":2}}
+{"ts":"2026-07-27T18:54:43.768Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"78ef5dd1-1864-420e-a4d0-f1701e4f22c6","meta":{"itemType":"message","itemId":"msg_resp_8a462ce6021743ea8572c2fd01babdc0","status":"completed","elapsed":881}}
+{"ts":"2026-07-27T18:54:43.769Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"78ef5dd1-1864-420e-a4d0-f1701e4f22c6","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:54:43.769Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"78ef5dd1-1864-420e-a4d0-f1701e4f22c6","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:54:43.769Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"78ef5dd1-1864-420e-a4d0-f1701e4f22c6","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":882,"opcRequestId":null}}
+{"ts":"2026-07-27T18:54:43.770Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"78ef5dd1-1864-420e-a4d0-f1701e4f22c6","meta":{"elapsed":883,"toolCalls":0,"textLength":184,"responseCompleted":true,"eventCount":6,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 987ms (compile: 30ms, proxy.ts: 1819µs, render: 956ms)
+ POST /api/generate-title 200 in 611ms (compile: 9ms, proxy.ts: 1497µs, render: 600ms)
+{"ts":"2026-07-27T18:55:03.403Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"b4882a27-8d2b-4aba-be06-db1a8fbba4de","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":2016,"hasConversation":true,"toolCount":0,"toolTypes":[],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:55:03.421Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"b4882a27-8d2b-4aba-be06-db1a8fbba4de"}
+{"ts":"2026-07-27T18:55:03.422Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"b4882a27-8d2b-4aba-be06-db1a8fbba4de","meta":{"itemType":"message","itemId":"msg_resp_eed26499d0e64c4e85099da32b859cc5","elapsed":1}}
+{"ts":"2026-07-27T18:55:03.827Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"b4882a27-8d2b-4aba-be06-db1a8fbba4de","meta":{"itemType":"message","itemId":"msg_resp_eed26499d0e64c4e85099da32b859cc5","status":"completed","elapsed":406}}
+{"ts":"2026-07-27T18:55:03.827Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"b4882a27-8d2b-4aba-be06-db1a8fbba4de","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:55:03.828Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"b4882a27-8d2b-4aba-be06-db1a8fbba4de","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:55:03.828Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"b4882a27-8d2b-4aba-be06-db1a8fbba4de","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":407,"opcRequestId":null}}
+{"ts":"2026-07-27T18:55:03.828Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"b4882a27-8d2b-4aba-be06-db1a8fbba4de","meta":{"elapsed":407,"toolCalls":0,"textLength":46,"responseCompleted":true,"eventCount":6,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 515ms (compile: 58ms, proxy.ts: 23ms, render: 435ms)
+ POST /api/generate-title 200 in 644ms (compile: 6ms, proxy.ts: 1484µs, render: 637ms)
+{"ts":"2026-07-27T18:55:20.723Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"57fbc5fd-42e8-4deb-81c6-9c21e29a1488","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":2016,"hasConversation":true,"toolCount":0,"toolTypes":[],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:55:20.737Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"57fbc5fd-42e8-4deb-81c6-9c21e29a1488"}
+{"ts":"2026-07-27T18:55:20.739Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"57fbc5fd-42e8-4deb-81c6-9c21e29a1488","meta":{"itemType":"message","itemId":"msg_resp_d3f9af0b3ffb42b89dc74e40226b9def","elapsed":2}}
+{"ts":"2026-07-27T18:55:21.835Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"57fbc5fd-42e8-4deb-81c6-9c21e29a1488","meta":{"itemType":"message","itemId":"msg_resp_d3f9af0b3ffb42b89dc74e40226b9def","status":"completed","elapsed":1098}}
+{"ts":"2026-07-27T18:55:21.836Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"57fbc5fd-42e8-4deb-81c6-9c21e29a1488","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:55:21.836Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"57fbc5fd-42e8-4deb-81c6-9c21e29a1488","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:55:21.836Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"57fbc5fd-42e8-4deb-81c6-9c21e29a1488","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":1099,"opcRequestId":null}}
+{"ts":"2026-07-27T18:55:21.837Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"57fbc5fd-42e8-4deb-81c6-9c21e29a1488","meta":{"elapsed":1100,"toolCalls":0,"textLength":202,"responseCompleted":true,"eventCount":6,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 1182ms (compile: 29ms, proxy.ts: 26ms, render: 1126ms)
+ POST /api/generate-title 200 in 466ms (compile: 12ms, proxy.ts: 1600µs, render: 452ms)
+ GET /settings/tools 200 in 295ms (compile: 69ms, proxy.ts: 8ms, render: 219ms)
+ GET /backgrounds/white-red-background.png 404 in 63ms (compile: 18ms, proxy.ts: 16ms, render: 29ms)
+ GET /api/auth/session 200 in 13ms (compile: 3ms, proxy.ts: 4ms, render: 6ms)
+ GET /api/vector-stores 200 in 417ms (compile: 16ms, proxy.ts: 16ms, render: 385ms)
+ GET /api/vector-stores 200 in 164ms (compile: 8ms, proxy.ts: 4ms, render: 152ms)
+ GET / 200 in 34ms (compile: 9ms, proxy.ts: 7ms, render: 19ms)
+ GET /api/auth/session 200 in 16ms (compile: 5ms, proxy.ts: 5ms, render: 6ms)
+ GET /api/auth/session 200 in 13ms (compile: 5ms, proxy.ts: 3ms, render: 5ms)
+ GET /api/auth/session 200 in 5ms (compile: 1535µs, proxy.ts: 1464µs, render: 2ms)
+ GET /api/auth/session 200 in 6ms (compile: 1660µs, proxy.ts: 1921µs, render: 2ms)
+ GET /api/auth/session 200 in 7ms (compile: 2ms, proxy.ts: 2ms, render: 2ms)
+ GET /api/auth/session 200 in 8ms (compile: 3ms, proxy.ts: 2ms, render: 3ms)
+ GET /api/vector-stores 200 in 743ms (compile: 16ms, proxy.ts: 1856µs, render: 725ms)
+ GET /api/vector-stores 200 in 100ms (compile: 12ms, proxy.ts: 3ms, render: 85ms)
+{"ts":"2026-07-27T18:56:15.278Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"8f99e0b7-f984-4dcf-ba32-18ab6331f645","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T18:56:15.584Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"8f99e0b7-f984-4dcf-ba32-18ab6331f645","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_2d2ecdc30e70d3b8753adfa3284fca9c254b9d2923fd2b5289\",\"object\":\"conversation\",\"created_at\":1785178575,\"metadata\":{\"topic\":\"What is document Understanding \",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 339ms (compile: 12ms, proxy.ts: 12ms, render: 315ms)
+{"ts":"2026-07-27T18:56:15.658Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":2381,"hasConversation":true,"toolCount":1,"toolTypes":["file_search"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:56:15.749Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4"}
+{"ts":"2026-07-27T18:56:15.751Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"itemType":"message","itemId":"msg_resp_a46ee011082d4511b51257ff29ac8f8e","elapsed":3}}
+{"ts":"2026-07-27T18:56:37.221Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"itemType":"file_search_call","itemId":"fs_resp_a46ee011082d4511b51257ff29ac8f8e_0","elapsed":21473}}
+{"ts":"2026-07-27T18:56:37.232Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"itemType":"file_search_call","itemId":"fs_resp_a46ee011082d4511b51257ff29ac8f8e_0","status":"completed","elapsed":21484}}
+{"ts":"2026-07-27T18:56:37.238Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"itemType":"message","itemId":"msg_resp_a46ee011082d4511b51257ff29ac8f8e","status":"completed","elapsed":21490}}
+{"ts":"2026-07-27T18:56:37.239Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:56:37.239Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"index":1,"type":"file_search_call","status":"completed"}}
+{"ts":"2026-07-27T18:56:37.239Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:56:37.239Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"status":"completed","error":null,"outputItems":2,"elapsed":21491,"opcRequestId":null}}
+{"ts":"2026-07-27T18:56:37.240Z","level":"info","component":"responses-api","msg":"Emitting file_search source citations","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"count":10}}
+{"ts":"2026-07-27T18:56:37.244Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"f7d9f9ae-215e-499b-add3-cf3c0ec5bdd4","meta":{"elapsed":21495,"toolCalls":0,"textLength":1221,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 21.6s (compile: 14ms, proxy.ts: 3ms, render: 21.6s)
+ POST /api/generate-title 200 in 777ms (compile: 27ms, proxy.ts: 8ms, render: 741ms)
+ GET /settings/tools 200 in 103ms (compile: 20ms, proxy.ts: 15ms, render: 68ms)
+ GET /api/auth/session 200 in 6ms (compile: 1837µs, proxy.ts: 1334µs, render: 3ms)
+ GET /api/vector-stores 200 in 656ms (compile: 10ms, proxy.ts: 1462µs, render: 644ms)
+ GET / 200 in 17ms (compile: 6ms, proxy.ts: 4ms, render: 7ms)
+ GET /api/auth/session 200 in 8ms (compile: 2ms, proxy.ts: 1452µs, render: 4ms)
+ GET /api/auth/session 200 in 15ms (compile: 3ms, proxy.ts: 2ms, render: 10ms)
+ GET /api/auth/session 200 in 7ms (compile: 1528µs, proxy.ts: 3ms, render: 2ms)
+ GET /api/auth/session 200 in 4ms (compile: 984µs, proxy.ts: 1181µs, render: 1740µs)
+ GET /api/auth/session 200 in 5ms (compile: 1512µs, proxy.ts: 1381µs, render: 2ms)
+ GET /api/auth/session 200 in 6ms (compile: 2ms, proxy.ts: 2ms, render: 1842µs)
+ GET /api/vector-stores 200 in 278ms (compile: 7ms, proxy.ts: 1341µs, render: 270ms)
+ GET /api/vector-stores 200 in 88ms (compile: 7ms, proxy.ts: 1386µs, render: 80ms)
+{"ts":"2026-07-27T18:57:13.869Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"ca91c115-f0b1-4b51-a46f-b0b274baafc7","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T18:57:14.093Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"ca91c115-f0b1-4b51-a46f-b0b274baafc7","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_e444fdccba2df4a460db729260241461a4feb43e9378a70aba\",\"object\":\"conversation\",\"created_at\":1785178634,\"metadata\":{\"topic\":\"Calculate 123*124\",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 276ms (compile: 34ms, proxy.ts: 9ms, render: 233ms)
+{"ts":"2026-07-27T18:57:14.179Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":2016,"hasConversation":true,"toolCount":1,"toolTypes":["code_interpreter"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:57:14.257Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896"}
+{"ts":"2026-07-27T18:57:14.258Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"itemType":"message","itemId":"msg_resp_af8fb0c9b3324127a36a8ab9fe0d4916","elapsed":1}}
+{"ts":"2026-07-27T18:57:26.288Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"itemType":"code_interpreter_call","itemId":"ci_resp_af8fb0c9b3324127a36a8ab9fe0d4916_0","elapsed":12031}}
+{"ts":"2026-07-27T18:57:26.291Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"itemType":"code_interpreter_call","itemId":"ci_resp_af8fb0c9b3324127a36a8ab9fe0d4916_0","status":"completed","elapsed":12034}}
+{"ts":"2026-07-27T18:57:26.302Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"itemType":"message","itemId":"msg_resp_af8fb0c9b3324127a36a8ab9fe0d4916","status":"completed","elapsed":12044}}
+{"ts":"2026-07-27T18:57:26.302Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:57:26.302Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:57:26.303Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":12046,"opcRequestId":null}}
+{"ts":"2026-07-27T18:57:26.303Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"f2f67afe-6415-4480-9c9e-224ce1dd8896","meta":{"elapsed":12046,"toolCalls":0,"textLength":22,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 12.1s (compile: 14ms, proxy.ts: 1807µs, render: 12.1s)
+ POST /api/generate-title 200 in 707ms (compile: 24ms, proxy.ts: 11ms, render: 672ms)
+ GET /settings/tools 200 in 129ms (compile: 14ms, proxy.ts: 17ms, render: 99ms)
+ GET /api/auth/session 200 in 8ms (compile: 3ms, proxy.ts: 1509µs, render: 4ms)
+ GET /api/semantic-stores 200 in 219ms (compile: 13ms, proxy.ts: 5ms, render: 201ms)
+ GET / 200 in 50ms (compile: 8ms, proxy.ts: 18ms, render: 24ms)
+ GET /api/auth/session 200 in 30ms (compile: 5ms, proxy.ts: 8ms, render: 16ms)
+ GET /api/auth/session 200 in 9ms (compile: 3ms, proxy.ts: 2ms, render: 4ms)
+ GET /api/auth/session 200 in 8ms (compile: 2ms, proxy.ts: 2ms, render: 3ms)
+ GET /api/auth/session 200 in 12ms (compile: 2ms, proxy.ts: 1645µs, render: 8ms)
+ GET /api/auth/session 200 in 8ms (compile: 5ms, proxy.ts: 1684µs, render: 2ms)
+ GET /api/auth/session 200 in 9ms (compile: 3ms, proxy.ts: 1455µs, render: 4ms)
+ GET /api/vector-stores 200 in 274ms (compile: 20ms, proxy.ts: 2ms, render: 251ms)
+ GET /api/vector-stores 200 in 128ms (compile: 8ms, proxy.ts: 2ms, render: 118ms)
+{"ts":"2026-07-27T18:58:10.534Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"d843dd7f-37c7-40e7-93f5-5db1f361bd2e","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T18:58:10.732Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"d843dd7f-37c7-40e7-93f5-5db1f361bd2e","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_84f0c3d19b8441cb338f5621ffcad6bb01e29815e573e88f4d\",\"object\":\"conversation\",\"created_at\":1785178690,\"metadata\":{\"topic\":\"List the tables in the\",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 239ms (compile: 21ms, proxy.ts: 9ms, render: 209ms)
+{"ts":"2026-07-27T18:58:10.814Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":2016,"hasConversation":true,"toolCount":2,"toolTypes":["code_interpreter","semantic_store"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:58:10.906Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628"}
+{"ts":"2026-07-27T18:58:10.908Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"itemType":"message","itemId":"msg_resp_268cd6b26873454b93fad5680031fb0b","elapsed":2}}
+{"ts":"2026-07-27T18:58:18.860Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"itemType":"mcp_call","itemId":"mcp_resp_268cd6b26873454b93fad5680031fb0b_0","elapsed":7953,"server":"McpServer"}}
+{"ts":"2026-07-27T18:58:18.862Z","level":"info","component":"responses-api","msg":"MCP tool calling","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"tool":"search_database","server":"McpServer","args":"{}","elapsed":7953}}
+{"ts":"2026-07-27T18:58:18.865Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"itemType":"mcp_call","itemId":"mcp_resp_268cd6b26873454b93fad5680031fb0b_0","status":"completed","elapsed":7959,"tool":"search_database","server":"McpServer"}}
+{"ts":"2026-07-27T18:58:18.865Z","level":"info","component":"responses-api","msg":"MCP tool succeeded","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"tool":"search_database","server":"McpServer","outputSize":442,"elapsed":7959}}
+{"ts":"2026-07-27T18:58:18.867Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"itemType":"message","itemId":"msg_resp_268cd6b26873454b93fad5680031fb0b","status":"completed","elapsed":7961}}
+{"ts":"2026-07-27T18:58:18.868Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:58:18.868Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:58:18.868Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":7962,"opcRequestId":null}}
+{"ts":"2026-07-27T18:58:18.870Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"99c0cdef-ff7a-436c-b2bc-31e8727c2628","meta":{"elapsed":7964,"toolCalls":1,"textLength":98,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 8.1s (compile: 25ms, proxy.ts: 3ms, render: 8.1s)
+ POST /api/generate-title 200 in 632ms (compile: 22ms, proxy.ts: 5ms, render: 605ms)
+{"ts":"2026-07-27T18:58:35.062Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":2016,"hasConversation":true,"toolCount":2,"toolTypes":["code_interpreter","semantic_store"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:58:35.075Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48"}
+{"ts":"2026-07-27T18:58:35.076Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"itemType":"message","itemId":"msg_resp_17c75b491e854417a9de3e428bc11cd1","elapsed":1}}
+{"ts":"2026-07-27T18:58:50.666Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"itemType":"mcp_call","itemId":"mcp_resp_17c75b491e854417a9de3e428bc11cd1_0","elapsed":15591,"server":"McpServer"}}
+{"ts":"2026-07-27T18:58:50.669Z","level":"info","component":"responses-api","msg":"MCP tool calling","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"tool":"search_database","server":"McpServer","args":"{}","elapsed":15591}}
+{"ts":"2026-07-27T18:58:50.672Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"itemType":"mcp_call","itemId":"mcp_resp_17c75b491e854417a9de3e428bc11cd1_0","status":"completed","elapsed":15597,"tool":"search_database","server":"McpServer"}}
+{"ts":"2026-07-27T18:58:50.672Z","level":"info","component":"responses-api","msg":"MCP tool succeeded","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"tool":"search_database","server":"McpServer","outputSize":442,"elapsed":15597}}
+{"ts":"2026-07-27T18:58:50.673Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"itemType":"mcp_call","itemId":"mcp_resp_17c75b491e854417a9de3e428bc11cd1_1","elapsed":15598,"server":"McpServer"}}
+{"ts":"2026-07-27T18:58:50.673Z","level":"info","component":"responses-api","msg":"MCP tool calling","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"tool":"search_database","server":"McpServer","args":"{}","elapsed":15598}}
+{"ts":"2026-07-27T18:58:50.674Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"itemType":"mcp_call","itemId":"mcp_resp_17c75b491e854417a9de3e428bc11cd1_1","status":"completed","elapsed":15599,"tool":"search_database","server":"McpServer"}}
+{"ts":"2026-07-27T18:58:50.674Z","level":"info","component":"responses-api","msg":"MCP tool succeeded","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"tool":"search_database","server":"McpServer","outputSize":4297,"elapsed":15599}}
+{"ts":"2026-07-27T18:58:50.678Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"itemType":"message","itemId":"msg_resp_17c75b491e854417a9de3e428bc11cd1","status":"completed","elapsed":15603}}
+{"ts":"2026-07-27T18:58:50.679Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:58:50.679Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:58:50.679Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":15604,"opcRequestId":null}}
+{"ts":"2026-07-27T18:58:50.684Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"52a643d1-9e7b-4e37-85eb-cf7c74c52c48","meta":{"elapsed":15608,"toolCalls":2,"textLength":1057,"responseCompleted":true,"eventCount":10,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 15.7s (compile: 46ms, proxy.ts: 32ms, render: 15.6s)
+ POST /api/generate-title 200 in 564ms (compile: 37ms, proxy.ts: 19ms, render: 508ms)
+ GET /settings/tools 200 in 115ms (compile: 14ms, proxy.ts: 13ms, render: 89ms)
+ GET /api/auth/session 200 in 7ms (compile: 3ms, proxy.ts: 1380µs, render: 2ms)
+ GET /api/semantic-stores 200 in 447ms (compile: 18ms, proxy.ts: 1455µs, render: 428ms)
+ GET /api/semantic-stores 200 in 330ms (compile: 77ms, proxy.ts: 17ms, render: 235ms)
+ GET /api/semantic-stores 200 in 88ms (compile: 14ms, proxy.ts: 1271µs, render: 72ms)
+{"ts":"2026-07-27T18:59:19.504Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"initialize","params":"{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"OCI-Chat\",\"version\":\"1.0.0\"}}"}}
+ POST /api/mcp 200 in 57ms (compile: 3ms, proxy.ts: 1983µs, render: 52ms)
+{"ts":"2026-07-27T18:59:19.560Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"tools/list","params":"{}"}}
+ POST /api/mcp 200 in 16ms (compile: 1320µs, proxy.ts: 1565µs, render: 13ms)
+{"ts":"2026-07-27T18:59:25.866Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"tools/list","params":"{}"}}
+ POST /api/mcp 200 in 52ms (compile: 17ms, proxy.ts: 7ms, render: 28ms)
+ GET / 200 in 51ms (compile: 9ms, proxy.ts: 9ms, render: 33ms)
+ GET /api/auth/session 200 in 16ms (compile: 3ms, proxy.ts: 2ms, render: 11ms)
+ GET /api/auth/session 200 in 7ms (compile: 3ms, proxy.ts: 1902µs, render: 2ms)
+ GET /api/auth/session 200 in 7ms (compile: 2ms, proxy.ts: 1527µs, render: 3ms)
+ GET /api/auth/session 200 in 8ms (compile: 2ms, proxy.ts: 2ms, render: 4ms)
+ GET /api/auth/session 200 in 10ms (compile: 3ms, proxy.ts: 4ms, render: 1941µs)
+ GET /api/auth/session 200 in 6ms (compile: 1842µs, proxy.ts: 1606µs, render: 3ms)
+ GET /api/vector-stores 200 in 233ms (compile: 9ms, proxy.ts: 1525µs, render: 223ms)
+ GET /api/vector-stores 200 in 86ms (compile: 7ms, proxy.ts: 3ms, render: 75ms)
+{"ts":"2026-07-27T18:59:47.809Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"e86ccdec-0591-4563-af7b-71568b1ff274","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T18:59:48.084Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"e86ccdec-0591-4563-af7b-71568b1ff274","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_0d6aa51a12219a73fe822138027cd5f51f201f7d441d8831dc\",\"object\":\"conversation\",\"created_at\":1785178788,\"metadata\":{\"topic\":\"Get the departments\",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 332ms (compile: 32ms, proxy.ts: 17ms, render: 282ms)
+{"ts":"2026-07-27T18:59:48.162Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":26479,"hasConversation":true,"toolCount":1,"toolTypes":["mcp"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T18:59:48.233Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649"}
+{"ts":"2026-07-27T18:59:48.236Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"itemType":"message","itemId":"msg_resp_c765ffe703574a778bac01a1819b5c12","elapsed":3}}
+{"ts":"2026-07-27T18:59:51.012Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"itemType":"mcp_call","itemId":"mcp_resp_c765ffe703574a778bac01a1819b5c12_0","elapsed":2779,"server":"MCP"}}
+{"ts":"2026-07-27T18:59:51.016Z","level":"info","component":"responses-api","msg":"MCP tool calling","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"tool":"get_dept","server":"MCP","args":"{}","elapsed":2779}}
+{"ts":"2026-07-27T18:59:51.017Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"itemType":"mcp_call","itemId":"mcp_resp_c765ffe703574a778bac01a1819b5c12_0","status":"completed","elapsed":2784,"tool":"get_dept","server":"MCP"}}
+{"ts":"2026-07-27T18:59:51.017Z","level":"info","component":"responses-api","msg":"MCP tool succeeded","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"tool":"get_dept","server":"MCP","outputSize":197,"elapsed":2784}}
+{"ts":"2026-07-27T18:59:51.019Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"itemType":"message","itemId":"msg_resp_c765ffe703574a778bac01a1819b5c12","status":"completed","elapsed":2786}}
+{"ts":"2026-07-27T18:59:51.019Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T18:59:51.019Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T18:59:51.020Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"status":"completed","error":null,"outputItems":1,"elapsed":2787,"opcRequestId":null}}
+{"ts":"2026-07-27T18:59:51.021Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"ea3df5a7-9c57-4c51-ac00-a81b8670c649","meta":{"elapsed":2787,"toolCalls":1,"textLength":216,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 2.9s (compile: 25ms, proxy.ts: 3ms, render: 2.9s)
+ POST /api/generate-title 200 in 585ms (compile: 31ms, proxy.ts: 10ms, render: 543ms)
+ GET /settings/tools 200 in 118ms (compile: 16ms, proxy.ts: 12ms, render: 90ms)
+ GET /api/auth/session 200 in 7ms (compile: 2ms, proxy.ts: 1860µs, render: 4ms)
+{"ts":"2026-07-27T19:00:07.520Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"initialize","params":"{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{},\"clientInfo\":{\"name\":\"OCI-Chat\",\"version\":\"1.0.0\"}}"}}
+ POST /api/mcp 200 in 30ms (compile: 2ms, proxy.ts: 3ms, render: 25ms)
+{"ts":"2026-07-27T19:00:07.592Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"tools/list","params":"{}"}}
+ POST /api/mcp 200 in 23ms (compile: 3ms, proxy.ts: 1912µs, render: 18ms)
+ GET /api/auth/session 200 in 32ms (compile: 10ms, proxy.ts: 7ms, render: 15ms)
+ GET /api/auth/session 200 in 9ms (compile: 3ms, proxy.ts: 1972µs, render: 5ms)
+ GET /api/vector-stores 200 in 375ms (compile: 51ms, proxy.ts: 7ms, render: 317ms)
+ GET /api/vector-stores 200 in 276ms (compile: 14ms, proxy.ts: 1643µs, render: 261ms)
+{"ts":"2026-07-27T19:00:15.940Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"tools/list","params":"{}"}}
+{"ts":"2026-07-27T19:00:15.946Z","level":"info","component":"mcp-proxy","msg":"MCP request","meta":{"method":"tools/list","params":"{}"}}
+ POST /api/mcp 200 in 56ms (compile: 2ms, proxy.ts: 2ms, render: 52ms)
+ POST /api/mcp 200 in 58ms (compile: 8ms, proxy.ts: 3ms, render: 47ms)
+ GET /api/vector-stores 200 in 227ms (compile: 17ms, proxy.ts: 3ms, render: 208ms)
+ GET / 200 in 56ms (compile: 12ms, proxy.ts: 14ms, render: 29ms)
+ GET /api/auth/session 200 in 15ms (compile: 4ms, proxy.ts: 1904µs, render: 9ms)
+ GET /api/auth/session 200 in 11ms (compile: 3ms, proxy.ts: 6ms, render: 3ms)
+ GET /api/auth/session 200 in 9ms (compile: 4ms, proxy.ts: 1549µs, render: 3ms)
+ GET /api/auth/session 200 in 10ms (compile: 3ms, proxy.ts: 3ms, render: 4ms)
+ GET /api/auth/session 200 in 5ms (compile: 1297µs, proxy.ts: 1161µs, render: 3ms)
+ GET /api/auth/session 200 in 6ms (compile: 1691µs, proxy.ts: 1406µs, render: 3ms)
+ GET /api/vector-stores 200 in 282ms (compile: 15ms, proxy.ts: 5ms, render: 262ms)
+ GET /api/vector-stores 200 in 96ms (compile: 7ms, proxy.ts: 2ms, render: 87ms)
+{"ts":"2026-07-27T19:00:34.503Z","level":"info","component":"conversations-api","msg":"Trying POST conversation","requestId":"9c331d27-b13b-4ebc-a25d-f2af3aa4d2bd","meta":{"basePath":"/openai/v1"}}
+{"ts":"2026-07-27T19:00:34.737Z","level":"info","component":"conversations-api","msg":"POST conversation response","requestId":"9c331d27-b13b-4ebc-a25d-f2af3aa4d2bd","meta":{"basePath":"/openai/v1","status":200,"response":"{\"id\":\"conv_c32c311f628c55a999f6fc25d2ea10ae111028112851cd7f48\",\"object\":\"conversation\",\"created_at\":1785178834,\"metadata\":{\"topic\":\"What is document understanding \",\"short_term_memory_optimization\":\"False\"}}"}}
+ POST /api/conversations 200 in 282ms (compile: 27ms, proxy.ts: 10ms, render: 245ms)
+{"ts":"2026-07-27T19:00:34.818Z","level":"info","component":"responses-api","msg":"Responses request payload","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"backend":"rest","model":"ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q","hasInstructions":true,"instructionsLen":26844,"hasConversation":true,"toolCount":1,"toolTypes":["file_search"],"stream":true,"store":true,"max_output_tokens":65535}}
+{"ts":"2026-07-27T19:00:34.843Z","level":"info","component":"responses-api","msg":"Stream started","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268"}
+{"ts":"2026-07-27T19:00:34.846Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"itemType":"message","itemId":"msg_resp_62d145c58c0b43d09831a7fe23c2bc02","elapsed":3}}
+{"ts":"2026-07-27T19:01:00.630Z","level":"info","component":"responses-api","msg":"Output item added","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"itemType":"file_search_call","itemId":"fs_resp_62d145c58c0b43d09831a7fe23c2bc02_0","elapsed":25787}}
+{"ts":"2026-07-27T19:01:00.634Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"itemType":"file_search_call","itemId":"fs_resp_62d145c58c0b43d09831a7fe23c2bc02_0","status":"completed","elapsed":25791}}
+{"ts":"2026-07-27T19:01:00.636Z","level":"info","component":"responses-api","msg":"Output item done","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"itemType":"message","itemId":"msg_resp_62d145c58c0b43d09831a7fe23c2bc02","status":"completed","elapsed":25793}}
+{"ts":"2026-07-27T19:01:00.643Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"index":0,"type":"message","status":"completed","role":"assistant"}}
+{"ts":"2026-07-27T19:01:00.643Z","level":"info","component":"responses-api","msg":"Completed output item","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"index":1,"type":"file_search_call","status":"completed"}}
+{"ts":"2026-07-27T19:01:00.644Z","level":"info","component":"responses-api","msg":"All MCP calls in completed response","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"count":0,"tools":[]}}
+{"ts":"2026-07-27T19:01:00.644Z","level":"info","component":"responses-api","msg":"Response completed","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"status":"completed","error":null,"outputItems":2,"elapsed":25801,"opcRequestId":null}}
+{"ts":"2026-07-27T19:01:00.645Z","level":"info","component":"responses-api","msg":"Emitting file_search source citations","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"count":10}}
+{"ts":"2026-07-27T19:01:00.646Z","level":"info","component":"responses-api","msg":"Stream ended","requestId":"611acb90-f5ef-4415-beaf-45fae25fa268","meta":{"elapsed":25803,"toolCalls":0,"textLength":1104,"responseCompleted":true,"eventCount":8,"lastEventType":"response.completed","stalled":false,"opcRequestId":null}}
+ POST /api/responses 200 in 25.9s (compile: 13ms, proxy.ts: 2ms, render: 25.8s)
+ POST /api/generate-title 200 in 561ms (compile: 27ms, proxy.ts: 13ms, render: 522ms)
