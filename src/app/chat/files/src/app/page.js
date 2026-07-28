@@ -254,6 +254,8 @@ export default function Home({ initialConversationId = null }) {
       setAppMode(savedMode);
     }
 
+    const GENAI_ENDPOINT_OCID=os.getenv("TF_VAR_genai_endpoint_ocid")
+
     const STATIC_MODELS = [
       // OpenAI - External & Internal
       "openai.gpt-oss-20b",
@@ -263,7 +265,7 @@ export default function Home({ initialConversationId = null }) {
       "google.gemini-2.5-flash-lite",
       "google.gemini-2.5-pro",
       // Gemma
-      "ocid1.generativeaiendpoint.oc1.uk-london-1.amaaaaaa2xxap7ya4nxzxjr227ju2p5mg3yvyyqufj272hm77z5a3na46t6q",
+      GENAI_ENDPOINT_OCID,
       // Internal-only entries (empty array on the public branch)
       ...INTERNAL_MODELS,
     ];
