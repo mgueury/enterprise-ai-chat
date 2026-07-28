@@ -20,11 +20,15 @@ if [ "$TF_VAR_openid_client_id" != "" ]; then
     export SESSION_SECRET='abcdefgh1234567890'
 fi    
 
+export RESPONSES_BACKEND="${RESPONSES_BACKEND:-rest}"
+export REST_RESPONSES_URL="${REST_RESPONSES_URL:-http://127.0.0.1:8080/responses}"
+export REST_RESPONSES_AUTHORIZATION="${REST_RESPONSES_AUTHORIZATION:-User local-dev}"
+
 # export LANGFUSE_SECRET_KEY=sk-lf-...
 # export LANGFUSE_PUBLIC_KEY=pk-lf-...
 # export LANGFUSE_BASE_URL=https://cloud.langfuse.com
 # export LOG_LEVEL=info
 
 cd files
-export PORT=8082
+export PORT=3000
 npm run dev > ../chat.log 2>&1 
