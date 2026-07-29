@@ -8,6 +8,7 @@ httpx
 oci-openai
 langgraph
 langchain_mcp_adapters
+mcp>=1.24,<2.0
 
 # FastAPI
 fastapi
