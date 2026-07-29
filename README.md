@@ -1,6 +1,8 @@
-## OCI Enterprise AI Chain
+## OCI - Enterprise AI Chat
 
-Installation using terraform
+Installation of "OCI Enterprise AI Chat" using Terraform
+
+More info: see https://github.com/oracle-devrel/technology-engineering/tree/main/ai/gen-ai-agents/oci-enterprise-ai-chat
 
 ### Parameters:
 
@@ -30,7 +32,6 @@ Installation using terraform
     - langfuse_base_url="http://langfuse-compute.##PREFIX##web.##PREFIX##vcn.oraclevcn.com:3000"
 
 ...
-
 
 ### Usage
 
